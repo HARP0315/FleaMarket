@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     use HasFactory;
+
+    /**
+     * 書き換え不可な属性の配列
+     *
+     * @var array
+     */
+    protected $guarded = [
+        'id',
+        'user_id',
+    ];
 }

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Condition extends Model
 {
     use HasFactory;
+
+    /**
+     * 書き換え不可な属性の配列
+     *
+     * @var array
+     */
+    protected $guarded = [
+        'id',
+    ];
 }

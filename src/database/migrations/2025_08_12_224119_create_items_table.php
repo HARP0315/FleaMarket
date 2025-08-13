@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('brand',255)->nullable();
             $table->string('description',255);
             $table->string('img',255);
-            $table->foreignId('category_id',255)->constrained()->cascadeOnDelete();
             $table->foreignId('condition_id',255)->constrained()->cascadeOnDelete();
             $table->integer('price');
             $table->timestamps();

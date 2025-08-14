@@ -40,4 +40,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function likes()
+{
+    // ユーザーがいいねしたItemを、likesテーブル経由で取得する
+    return $this->belongsToMany(Item::class, 'likes', 'user_id', 'item_id');
+}
 }

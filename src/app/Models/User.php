@@ -41,9 +41,29 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+        public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function likes()
-{
+    {
     // ユーザーがいいねしたItemを、likesテーブル経由で取得する
-    return $this->belongsToMany(Item::class, 'likes', 'user_id', 'item_id');
-}
+        return $this->belongsToMany(Item::class, 'likes', 'user_id', 'item_id');
+    }
 }

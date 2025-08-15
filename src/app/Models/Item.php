@@ -18,4 +18,29 @@ class Item extends Model
         'id',
         'user_id',
     ];
+
+    public function purchase()
+    {
+        return $this->hasOne(Purchase::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function condition()
+    {
+        return $this->belongsTo(Condition::class);
+    }
+
+        public function categories()
+    {
+        return $this->belongsToMany(Category::class,'category_item','item_id','category_id');
+    }
 }

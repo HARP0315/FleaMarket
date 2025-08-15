@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('img',255)->nullable();
-            $table->string('post_code',255);
-            $table->string('address',255);
+            $table->string('post_code',255)->nullable();
+            $table->string('address',255)->nullable();
             $table->timestamps();
         });
     }

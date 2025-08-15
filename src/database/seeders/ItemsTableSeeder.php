@@ -123,7 +123,8 @@ class ItemsTableSeeder extends Seeder
                 'condition_id' => 2,
                 'price' => 2500,
                 'categories' => [4, 6]
-            ],
+            ]
+        ];
 
         foreach ($items_data as $item_data) {
             $category_ids = $item_data['categories'];

@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +18,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// ■ 誰でも見れるページ
+Route::get('/', [ItemController::class, 'index']);
+// 他に、商品詳細ページなどもここ
+
+// ■ ログインが必要なページ
+Route::middleware('auth')->group(function () {
+    // Route::get('/mypage', ...)->name('mypage.index');
+    // Route::get('/sell', ...);
+    // ...など
 });

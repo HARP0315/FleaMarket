@@ -21,7 +21,7 @@
                 <label for="password" class="login-form__label form__label">パスワード</label>
                 <input type="password" name="password" id="password" class="login-form__input">
             </div>
-            <input type="submit" value="ログインする" class="login-form__submit btn">
+            <input type="submit" value="ログインする" class="login-form__submit">
         </form>
         <a href="/register" class="login-form__register-link">会員登録はこちら</a>
     </div>

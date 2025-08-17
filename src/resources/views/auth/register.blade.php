@@ -29,7 +29,7 @@
                 <label for="password_confirmation" class="register-form__label form__label">確認用パスワード</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" class="register-form__input">
             </div>
-            <input type="submit" value="登録する" class="register-form__submit btn">
+            <input type="submit" value="登録する" class="register-form__submit">
         </form>
         <a href="/login" class="register-form__login-link">ログインはこちら</a>
     </div>

@@ -11,5 +11,8 @@ use App\Models\Condition;
 
 class ItemController extends Controller
 {
-    //
+    public function index()
+    {
+        return view('index');
+    }
 }

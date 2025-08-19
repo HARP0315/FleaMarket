@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('payment_method', 255);
             $table->string('post_code', 255);
             $table->string('address', 255);
+            $table->string('building',255)->nullable();
             $table->timestamps();
         });
     }

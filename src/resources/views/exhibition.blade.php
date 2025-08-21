@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="exhibition-form__submit">出品する</button>
+        <input type="submit" class="exhibition-form__submit" value="出品する">
     </form>
 </div>
 

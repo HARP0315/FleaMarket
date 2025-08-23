@@ -31,13 +31,13 @@
             <a href="/item/{{$item->id}}" class="mypage-list__item-link">
                 <img src="{{asset($item->img)}}" alt="商品画像" class="mypage-list__item-img">
                 @if(request()->query('page', 'sell') === 'sell' && $item->purchase)
-                    <div class="mypage-list__sold-overlay">
-                        <span>SOLD</span>
+                    <div class="mypage-list__sold-box">
+                        <span class="mypage-list__sold-box--alert">SOLD</span>
                     </div>
                 @endif
             </a>
             <div class="mypage-list__item-info">
-            <p class=mypage-list__item-name>商品名持ってくる</p>
+            <p class=mypage-list__item-name>{{$item->name}}</p>
             </div>
         </div>
         @endforeach

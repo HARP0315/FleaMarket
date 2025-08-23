@@ -43,4 +43,19 @@ class Item extends Model
     {
         return $this->belongsToMany(Category::class,'category_item','item_id','category_id');
     }
+
+    public function likes()
+    {
+    return $this->belongsToMany(User::class, 'likes', 'item_id', 'user_id');
+    }
+
+    public function isLikedBy($user): bool
+    {
+    // もし$userがnullなら(未ログイン)、falseを返す
+        if ($user === null) {
+        return false;
+        }
+    // この商品のいいねリストの中に、引数で渡されたユーザーのIDが存在するかどうかをチェック
+    return $this->likes()->where('user_id', $user->id)->exists();
+    }
 }

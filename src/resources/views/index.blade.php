@@ -11,7 +11,7 @@
         <a href="/?tab=mylist" class="item-list__tab-link {{ request()->query('tab') === 'mylist' ? 'item-list__tab-link--active' : '' }}">マイリスト</a>
     </div>
     <div class="item-list__content">
-        @foreach($items as $item)
+        {{-- @foreach($items as $item)
         <div class="item-list__item">
             <a href="/item/{{$item->id}}" class="item-list__item-link">
                 @if(!$item->purchase)
@@ -26,7 +26,7 @@
             <p class=item-list__item-name>{{$item->name}}</p>
             </div>
         </div>
-        @endforeach
+        @endforeach --}}
     </div>
 </div>
 

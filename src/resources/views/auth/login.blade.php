@@ -15,11 +15,17 @@
             @csrf
             <div class="login-form__group">
                 <label for="email" class="login-form__label form__label">メールアドレス</label>
-                <input type="email" name="email" id="email" class="login-form__input">
+                <input type="mail" name="email" id="email" class="login-form__input">
+                @error('email')
+                    <p class="login-form__error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div class="login-form__group">
                 <label for="password" class="login-form__label form__label">パスワード</label>
                 <input type="password" name="password" id="password" class="login-form__input">
+                @error('password')
+                    <p class="login-form__error-message">{{ $message }}</p>
+                @enderror
             </div>
             <input type="submit" value="ログインする" class="login-form__submit">
         </form>

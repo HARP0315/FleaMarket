@@ -26,6 +26,9 @@
                     <option value="{{$key}}">{{$value}}</option>
                     @endforeach
                 </select>
+                @error('payment_method')
+                    <p class="purchase-page__error-message">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="purchase-page__group">
@@ -33,6 +36,11 @@
                 <a href="/purchase/address/{{$item->id}}" class="shipping-address__change-link">変更する</a>
                 <p class="purchase-page__post-code">〒{{ $address->post_code }}</p>
                 <p class="purchase-page__address">{{ $address->address }}</p>
+                <input type="hidden" name="post_code" value="{{ $address->post_code }}">
+                <input type="hidden" name="address" value="{{ $address->address }}">
+                @error('address')
+                    <p class="purchase-page__error-message">{{ $message }}</p>
+                @enderror
             </div>
         </div>
 

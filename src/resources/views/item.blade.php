@@ -109,6 +109,9 @@
                         @csrf
                         <textarea name="content" class="item-page__comment-textarea" placeholder="コメントを入力"></textarea>
                         <input type="submit" class="item-page__comment-submit" value="コメントを送信する">
+                    @error('content')
+                        <p class="item-page__error-message">{{ $message }}</p>
+                    @enderror
                     </form>
                 </div>
             @endif

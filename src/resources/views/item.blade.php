@@ -91,7 +91,7 @@
             @foreach($comments as $comment)
                 <div class="comment-item">
                     @if($comment->user->img)
-                        <img src="{{ asset($comment->user->img) }}" alt="画像" class="comment-item__user-img">
+                        <img src="{{ asset($comment->'storage/' . user->img) }}" alt="画像" class="comment-item__user-img">
                     @else
                         <div class="comment-item__user-img--alternative"></div>
                     @endif

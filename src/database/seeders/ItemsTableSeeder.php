@@ -45,16 +45,6 @@ class ItemsTableSeeder extends Seeder
                 'categories' => [10]
             ],
             [
-                'user_id' => 2,
-                'name' => 'スニーカー',
-                'brand' => 'Nike',
-                'description' => '快適な履き心地のスニーカー',
-                'img' => 'images/Leather+Shoes+Product+Photo.jpg',
-                'condition_id' => 1,
-                'price' => 12000,
-                'categories' => [1, 5]
-            ],
-            [
                 'user_id' => 1,
                 'name' => '革靴',
                 'brand' => '',

@@ -24,6 +24,9 @@ Route::get('/', [ItemController::class, 'index']);
 
 // ■ ログインが必要なページ
 Route::middleware('auth')->group(function () {
+    Route::get('/mypage',[UserController::class,'index']);
+    Route::get('/mypage/profile',[UserController::class,'edit']);
+    Route::patch('/mypage/profile',[UserController::class,'update']);
     // Route::get('/mypage', ...)->name('mypage.index');
     // Route::get('/sell', ...);
     // ...など

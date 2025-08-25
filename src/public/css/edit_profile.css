@@ -1,0 +1,7 @@
+.profile-form__file-input {
+    /* 完全に画面の外に隠す */
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    opacity: 0;
+}

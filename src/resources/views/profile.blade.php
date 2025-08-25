@@ -9,7 +9,7 @@
     <div class="mypage-list__heading">
         <div class="mypage-list__heading-user-img">
             @if($user->img)
-                <img src="{{asset($user->img)}}" alt="画像">
+                <img src="{{asset('storage/' . $user->img)}}" alt="画像">
             @else
                 <div class="mypage-list__heading-user-img--alternative"></div>
             @endif

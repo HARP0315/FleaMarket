@@ -13,7 +13,7 @@
 
         <div class="purchase-page__main"> {{-- ← ページ左側 --}}
             <div class="purchase-page__group">
-                <img src="{{asset($item->img)}}" alt="商品画像" class="purchase-page__item-img">
+                <img src="{{asset('storage/' . $item->img)}}" alt="商品画像" class="purchase-page__item-img">
                 <h2 class="purchase-page__item-name">{{ $item->name }}</h2>
                 <p class="purchase-page__item-price">¥<span>{{ number_format($item->price) }}</span></p>
             </div>

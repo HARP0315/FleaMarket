@@ -22,7 +22,7 @@ class AddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'post_code' => 'required|regex:^\d{3}-\d{4}$',
+            'post_code' => 'required|regex:/^\d{3}-\d{4}$/',
             'address' => 'required',
             ];
     }

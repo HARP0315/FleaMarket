@@ -13,7 +13,7 @@
         <div class="profile-form__group">
             <div class="profile-form__user-img-area">
                 @if($user->img)
-                    <img src="{{asset($user->img)}}" alt="画像">
+                    <img src="{{asset('storage/' . $user->img)}}" alt="画像">
                 @else
                     <div class="profile-form__user-img--alternative"></div>
                 @endif
@@ -46,7 +46,7 @@
         </div>
         <div class="profile-form__group">
             <label for="address" class="profile-form__label form__label">住所</label>
-            <input type="text" name="address" id="address" class="profile-form__input">
+            <input type="text" name="address" id="address" class="profile-form__input" value="{{ old('address', $user->address) }}">
             <p class="profile-form__error-message">
                 @error('address')
                     {{ $message }}
@@ -55,7 +55,12 @@
         </div>
         <div class="profile-form__group">
             <label for="building" class="profile-form__label form__label">建物名</label>
-            <input type="text" name="building" id="building" class="profile-form__input">
+            <input type="text" name="building" id="building" class="profile-form__input" value="{{ old('building', $user->building) }}">
+            <p class="profile-form__error-message">
+                @error('building')
+                    {{ $message }}
+                @enderror
+            </p>
         </div>
         <input type="submit" value="更新する" class="profile-form__submit">
     </form>

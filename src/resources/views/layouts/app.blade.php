@@ -18,7 +18,7 @@
         @if (!request()->is('login','register'))
         <div class="header-nav">
             <form class="search-form" action="/search" method="get">
-                <input type="search" name="keyword" placeholder="なにをお探しですか？">
+                <input type="search" name="keyword" placeholder="なにをお探しですか？" value="{{request('keyword')}}" id="search-input">
             </form>
             <nav>
                 <ul>
@@ -37,5 +37,18 @@
     </header>
     @yield('content')
 </div>
+<script>
+    // 1. idを使って検索入力欄の要素を取得する
+    const searchInput = document.getElementById('search-input');
+
+    // 2. 検索入力欄で'search'イベントが発生したら、中の処理を実行する
+    searchInput.addEventListener('search', function() {
+        // 3. もし入力欄の中身が空っぽになったら...
+        if (searchInput.value === '') {
+            // 4. トップページ('/')に移動する
+            window.location.href = '/';
+        }
+    });
+</script>
 </body>
 </html>

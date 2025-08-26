@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 // ■ 誰でも見れるページ
 Route::get('/', [ItemController::class, 'index']);
+Route::get('/search', [ItemController::class, 'search']);
 // 他に、商品詳細ページなどもここ
 
 // ■ ログインが必要なページ

@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/mypage/profile',[UserController::class,'update']);
     Route::get('/sell',[ItemController::class,'create']);
     Route::post('/sell',[ItemController::class,'store']);
+    Route::get('/purchase/address/{item_id}',[PurchaseController::class,'create']);
     // Route::get('/mypage', ...)->name('mypage.index');
     // Route::get('/sell', ...);
     // ...など

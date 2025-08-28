@@ -51,6 +51,7 @@ class ItemController extends Controller
         $item = Item::create($form);
 
         $item->categories()->attach($categoryIds);
+        // TODO これでcategory_itemテーブルにデータが保存されるの？？
         return redirect('/');
     }
 }

@@ -27,8 +27,9 @@ class ExhibitionRequest extends FormRequest
             'img' => 'required|mimes:jpeg,png| extensions:jpeg,png',
             'categories' => 'required|array',
             'categories.*' => 'exists:categories,id',
-            'condition_id' => 'required',
+            'condition' => 'required',
             'price' => 'required|integer|min:0',
+            'brand' => 'nullable|string|max:255',
             ];
     }
 
@@ -42,10 +43,12 @@ class ExhibitionRequest extends FormRequest
             'img.mimes' => '画像はjpegまたはpng形式でアップロードしてください',
             'img.extensions' => '画像はjpegまたはpng形式でアップロードしてください',
             'categories.required' => 'カテゴリーを選択してください',
-            'condition_id.required' => '商品の状態を選択してください',
+            'condition.required' => '商品の状態を選択してください',
             'price.required' => '価格を入力してください',
             'price.integer' => '価格は整数で入力してください',
             'price.min' => '価格は0以上で入力してください',
+            'brand.string' => '建物は文字列で入力してください',
+            'brand.max' => '建物は255文字以内で入力してください',
         ];
     }
 }

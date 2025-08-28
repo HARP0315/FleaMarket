@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->integer('price');
-            $table->string('payment_method', 255);
+            $table->tinyInteger('payment_method');
             $table->string('post_code', 255);
             $table->string('address', 255);
             $table->string('building',255)->nullable();

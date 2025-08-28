@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ExhibitionRequest;
 use App\Models\Item;
 use App\Models\Category;
-use App\Models\Condition;
+use Illuminate\Support\Facades\Auth;
 
 
 class ItemController extends Controller
@@ -30,5 +30,27 @@ class ItemController extends Controller
         $items = $query->get();
         return view('index',compact('items'));
 
+    }
+
+    public function create()
+    {
+        $categories = Category::all();
+        return view('exhibition',compact('categories'));
+    }
+
+    public function store(ExhibitionRequest $request)
+    {
+        $form = $request->validated();
+
+        $form['user_id'] = Auth::id();
+        $categoryIds = $form['categories'];
+        unset($form['categories']);
+
+        $path = $request->file('img')->store('items', 'public');
+        $form['img'] = $path;
+        $item = Item::create($form);
+
+        $item->categories()->attach($categoryIds);
+        return redirect('/');
     }
 }

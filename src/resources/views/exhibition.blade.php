@@ -25,7 +25,9 @@
                 <div class="exhibition-form__category-list">
                     @foreach($categories as $category)
                         <div class="exhibition-form__category-item">
-                            <input type="checkbox" name="categories[]" id="category-{{ $category->id }}" value="{{ $category->id }}">
+                            <input type="checkbox" name="categories[]" id="category-{{ $category->id }}" value="{{ $category->id }}"
+                             @if(is_array(old('categories')) && in_array($category->id, old('categories'))) checked @endif
+                            >
                             <label for="category-{{ $category->id }}" class="exhibition-form__category-label">{{ $category->content }}</label>
                         </div>
                     @endforeach
@@ -36,10 +38,12 @@
             </div>
             <div class="exhibition-form__detail-area">
                 <label for="condition" class="exhibition-form__label">商品の状態</label>
-                <select name="condition_id" id="condition" class="exhibition-form__select">
+                <select name="condition" id="condition" class="exhibition-form__select">
                     <option disabled selected>選択してください</option>
-                    @foreach($conditions as $condition)
-                        <option value="{{ $condition->id }}">{{ $condition->content }}</option>
+                    @foreach(config('const.conditions.conditions') as $key => $value)
+                        <option value="{{ $key }}"
+                         @if(old('condition') == $key) selected @endif
+                        >{{$value}}</option>
                     @endforeach
                 </select>
                 @error('condition_id')
@@ -59,10 +63,13 @@
             <div class="exhibition-form__detail-area">
                 <label for="brand" class="exhibition-form__label">ブランド名</label>
                 <input type="text" name="brand" id="brand" class="exhibition-form__input" value="{{ old('brand') }}">
+                @error('brand')
+                    <p class="exhibition-form__error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div class="exhibition-form__detail-area">
                 <label for="description" class="exhibition-form__label">商品の説明</label>
-                <textarea name="description" id="description" class="exhibition-form__textarea">{{ old('description') }}</textarea>
+                <textarea name="description" id="description" class="exhibition-form__textarea" value="{{old('description')}}">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="exhibition-form__error-message">{{ $message }}</p>
                 @enderror
@@ -74,6 +81,7 @@
                 <label for="price" class="exhibition-form__label">販売価格</label>
                 <div class="exhibition-form__price-box">
                     <span>¥</span>
+                    {{-- ボックスの前に擬似で￥つけるからあとで消す --}}
                     <input type="text" name="price" id="price" class="exhibition-form__price-input" value="{{ old('price') }}">
                 </div>
                 @error('price')

@@ -15,7 +15,7 @@
         <div class="item-list__item">
             <a href="/item/{{$item->id}}" class="item-list__item-link">
                 @if(!$item->purchase)
-                    <img src="{{ asset($item->img) }}" alt="{{ $item->name }}" class="item-list__item-img">
+                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="item-list__item-img">
                 @else
                     <div class="item-list__sold-box">
                         <span class="item-list__sold-box--alert">SOLD</span>

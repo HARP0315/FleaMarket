@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Str;
 
 class Item extends Model
 {
@@ -16,7 +18,6 @@ class Item extends Model
      */
     protected $guarded = [
         'id',
-        'user_id',
     ];
 
     public function purchase()
@@ -34,10 +35,10 @@ class Item extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function condition()
-    {
-        return $this->belongsTo(Condition::class);
-    }
+    // public function condition()
+    // {
+    //     return $this->belongsTo(Condition::class);
+    // }
 
         public function categories()
     {
@@ -57,5 +58,41 @@ class Item extends Model
         }
     // この商品のいいねリストの中に、引数で渡されたユーザーのIDが存在するかどうかをチェック
     return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * conditionを、configファイルの値（文字列）に変換するためのアクセサ
+     */
+    protected function conditionContent(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => config('conditions.conditions')[$this->condition] ?? '未設定',
+        );
+    }
+
+    /**
+     * 画像のURLを自動的に判断して返すアクセサ
+     */
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                // $attributes['img'] で、このモデルの'img'カラムの値を取得
+                $path = $attributes['img'];
+
+                // もしパスが'http'で始まっていたら、それは外部URLなのでそのまま返す
+                if (Str::startsWith($path, 'http')) {
+                    return $path;
+                }
+
+                // もしパスが'items/'や'profiles/'で始まっていたら、それはユーザーがアップロードしたファイル
+                if (Str::startsWith($path, 'items/') || Str::startsWith($path, 'profiles/')) {
+                    return asset('storage/' . $path);
+                }
+
+                // それ以外は、publicフォルダにあるダミー画像と判断
+                return asset($path);
+            }
+        );
     }
 }

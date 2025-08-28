@@ -15,14 +15,14 @@
             @csrf
             <div class="register-form__group">
                 <label for="name" class="register-form__label form__label">ユーザ名</label>
-                <input type="text" name="name" id="name" class="register-form__input">
+                <input type="text" name="name" id="name" class="register-form__input" value="{{ old('name') }}">
                 @error('name')
                     <p class="register-form__error-message">{{ $message }}</p>
                 @enderror
             </div>
             <div class="register-form__group">
                 <label for="email" class="register-form__label form__label">メールアドレス</label>
-                <input type="email" name="email" id="email" class="register-form__input">
+                <input type="email" name="email" id="email" class="register-form__input" value="{{ old('email') }}">
                 @error('email')
                     <p class="register-form__error-message">{{ $message }}</p>
                 @enderror

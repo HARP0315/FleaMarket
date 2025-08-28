@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/mypage',[UserController::class,'index']);
     Route::get('/mypage/profile',[UserController::class,'edit']);
     Route::patch('/mypage/profile',[UserController::class,'update']);
+    Route::get('/sell',[ItemController::class,'create']);
+    Route::post('/sell',[ItemController::class,'store']);
     // Route::get('/mypage', ...)->name('mypage.index');
     // Route::get('/sell', ...);
     // ...など

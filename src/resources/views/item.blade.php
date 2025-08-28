@@ -10,7 +10,7 @@
 <div class="item-page">
     <div class="item-page__main-content">
         <div class="item-page__img-area">
-            <img src="{{ asset($item->img) }}" alt="{{ $item->name }}" class="item-page__item-img">
+            <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="item-page__item-img">
         </div>
         <div class="item-page__content">
             <div class="item-page__item-info">
@@ -77,7 +77,7 @@
                     </div>
                     <div class="item-page__details-item">
                         <dt class="item-page__details-item-term">商品の状態</dt>
-                        <dd class="item-page__details-item-data">{{ $item->condition->content }}</dd>
+                        <dd class="item-page__details-item-data">{{ $item->condition_content }}</dd>
                     </div>
                 </dl>
             </div>

@@ -16,11 +16,9 @@ class Comment extends Model
      */
     protected $guarded = [
         'id',
-        'user_id',
-        'item_id',
     ];
 
-    public function comment()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

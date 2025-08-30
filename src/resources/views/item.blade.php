@@ -23,7 +23,7 @@
                     <div class="item-page__like">
                         @if($item->isLikedBy(Auth::user()))
                             {{-- いいね解除 --}}
-                            <form action="{{ route('unlike', $item) }}" method="post">
+                            <form action="/item/{{$item->id}}/unlike" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="item-page__like-btn">
@@ -32,7 +32,7 @@
                             </form>
                         @else
                             {{-- いいね --}}
-                            <form action="{{ route('like', $item) }}" method="post">
+                            <form action="/item/{{$item->id}}/like" method="post">
                                 @csrf
                                 <button type="submit" class="item-page__like-btn">
                                     <i class="fa-regular fa-star"></i> {{-- 枠線のみの星 --}}
@@ -91,7 +91,7 @@
             @foreach($comments as $comment)
                 <div class="comment-item">
                     @if($comment->user->img)
-                        <img src="{{ asset($comment->'storage/' . user->img) }}" alt="画像" class="comment-item__user-img">
+                        <img src="{{ asset('storage/'.$comment->user->img) }}" alt="画像" class="comment-item__user-img">
                     @else
                         <div class="comment-item__user-img--alternative"></div>
                     @endif

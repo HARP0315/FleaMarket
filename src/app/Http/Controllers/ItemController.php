@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ExhibitionRequest;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -51,7 +52,15 @@ class ItemController extends Controller
         $item = Item::create($form);
 
         $item->categories()->attach($categoryIds);
-        // TODO これでcategory_itemテーブルにデータが保存されるの？？
         return redirect('/');
+    }
+
+    public function show($item_id)
+    {
+        $item = Item::findOrFail($item_id);
+        $comments = Comment::where('item_id', $item_id)
+            ->with('user')->latest()->take(3)->get();
+
+        return view('item',compact('item','comments'));
     }
 }

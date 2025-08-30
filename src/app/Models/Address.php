@@ -16,7 +16,6 @@ class Address extends Model
      */
     protected $guarded = [
         'id',
-        'user_id',
     ];
 
     public function user()

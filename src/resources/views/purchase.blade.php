@@ -65,3 +65,23 @@
 </div>
 
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // 1. 支払い方
+    // 法を選択する<select>要素を取得します
+    const paymentSelect = document.getElementById('payment');
+
+    // 2. 選択された支払い方法を表示する<dd>要素を取得します
+    const paymentDisplay = document.getElementById('payment-display');
+
+    // 3. <select>要素の値が変更されたとき（changeイベント）に、中の処理を実行するように設定します
+    paymentSelect.addEventListener('change', function() {
+        // 4. 選択されている<option>の「表示されているテキスト」（例：「コンビニ払い」）を取得します
+        const selectedText = this.options[this.selectedIndex].text;
+
+        // 5. 表示用の<dd>要素の中身を、取得したテキストで書き換えます
+        paymentDisplay.textContent = selectedText;
+    });
+});
+</script>

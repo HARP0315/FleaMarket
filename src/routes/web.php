@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 // ■ 誰でも見れるページ
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'search']);
+Route::get('/item/{item_id}',[ItemController::class,'show']);
 // 他に、商品詳細ページなどもここ
 
 // ■ ログインが必要なページ
@@ -30,7 +31,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/mypage/profile',[UserController::class,'update']);
     Route::get('/sell',[ItemController::class,'create']);
     Route::post('/sell',[ItemController::class,'store']);
-    Route::get('/purchase/address/{item_id}',[PurchaseController::class,'create']);
+    Route::post('/item/{item}/like',[LikeController::class,'store']);
+    Route::delete('/item/{item}/unlike',[LikeController::class,'destroy']);
+    Route::post('/item/{item}/comments',[CommentController::class,'store']);
+    Route::get('/purchase/{item_id}',[PurchaseController::class,'create']);
+    Route::get('/purchase/address/{item_id}',[PurchaseController::class,'edit']);
+    Route::post('/purchase/address/{item_id}',[PurchaseController::class,'update']);
     // Route::get('/mypage', ...)->name('mypage.index');
     // Route::get('/sell', ...);
     // ...など

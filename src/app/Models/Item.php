@@ -35,11 +35,6 @@ class Item extends Model
         return $this->belongsTo(User::class);
     }
 
-    // public function condition()
-    // {
-    //     return $this->belongsTo(Condition::class);
-    // }
-
         public function categories()
     {
         return $this->belongsToMany(Category::class,'category_item','item_id','category_id');
@@ -66,7 +61,7 @@ class Item extends Model
     protected function conditionContent(): Attribute
     {
         return Attribute::make(
-            get: fn () => config('conditions.conditions')[$this->condition] ?? '未設定',
+            get: fn () => config('const.conditions.conditions')[$this->condition] ?? '未設定',
         );
     }
 

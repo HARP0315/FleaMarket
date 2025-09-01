@@ -16,8 +16,6 @@ class Purchase extends Model
      */
     protected $guarded = [
         'id',
-        'user_id',
-        'item_id',
     ];
 
     public function user()

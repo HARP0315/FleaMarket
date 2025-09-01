@@ -6,6 +6,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/item/{item}/unlike',[LikeController::class,'destroy']);
     Route::post('/item/{item}/comments',[CommentController::class,'store']);
     Route::get('/purchase/{item_id}',[PurchaseController::class,'create']);
+    Route::post('/purchase/{item_id}',[PurchaseController::class,'store']);
     Route::get('/purchase/address/{item_id}',[PurchaseController::class,'edit']);
     Route::post('/purchase/address/{item_id}',[PurchaseController::class,'update']);
     // Route::get('/mypage', ...)->name('mypage.index');

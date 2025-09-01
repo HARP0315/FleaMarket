@@ -29,11 +29,12 @@
         @foreach($items as $item)
         <div class="mypage-list__item">
             <a href="/item/{{$item->id}}" class="mypage-list__item-link">
-                <img src="{{ $item->image_url }}" alt="商品画像" class="mypage-list__item-img">
                 @if(request()->query('page', 'sell') === 'sell' && $item->purchase)
                     <div class="mypage-list__sold-box">
                         <span class="mypage-list__sold-box--alert">SOLD</span>
                     </div>
+                @else
+                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="mypage-list__item-img">
                 @endif
             </a>
             <div class="mypage-list__item-info">

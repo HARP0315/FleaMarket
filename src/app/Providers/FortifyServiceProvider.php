@@ -17,7 +17,11 @@ use Laravel\Fortify\Http\Requests\LoginRequest as FortifyLoginRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest; // RegisterRequestをuse
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Contracts\LogoutResponse;
+use App\Http\Auth\RegisterResponse;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+use App\Http\Auth\LoginResponse;
 
 
 class FortifyServiceProvider extends ServiceProvider
@@ -28,11 +32,20 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
-        public function toResponse($request)
-        {
-            return redirect('/');
-        }
-    });
+            public function toResponse($request)
+            {
+                return redirect('/login');
+            }
+        });
+
+        $this->app->singleton(
+            RegisterResponseContract::class,
+            RegisterResponse::class);
+
+        $this->app->singleton(
+            LoginResponseContract::class,
+            LoginResponse::class
+        );
 
     }
 
@@ -62,5 +75,6 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->bind(CreatesNewUsers::class, function ($app) {
             return new CreateNewUser($app->make(RegisterRequest::class));
         });
+
     }
 }

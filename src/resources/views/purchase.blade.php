@@ -16,6 +16,7 @@
                 <img src="{{$item->image_url}}" alt="商品画像" class="purchase-page__item-img">
                 <h2 class="purchase-page__item-name">{{ $item->name }}</h2>
                 <p class="purchase-page__item-price">¥<span>{{ number_format($item->price) }}</span></p>
+                <input type="hidden" name="price" value="{{ $item->price }}">
             </div>
 
             <div class="purchase-page__group">

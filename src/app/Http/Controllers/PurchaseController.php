@@ -33,6 +33,17 @@ class PurchaseController extends Controller
         return view('purchase',compact('item','address'));
     }
 
+    public function store(PurchaseRequest $request,$item_id)
+    {
+        //  必要なもの：user_id,item_id,request
+        $form = $request->validated();
+        $form['user_id']=Auth::id();
+        $form['item_id']=$item_id;
+
+        Purchase::create($form);
+
+        return redirect('/');
+    }
 
     public function edit($item_id)
     {

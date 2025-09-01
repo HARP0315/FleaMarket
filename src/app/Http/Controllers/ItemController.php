@@ -12,9 +12,32 @@ use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::all();
+        // 1. まず、Itemを取得するためのクエリの準備を始める
+        $query = Item::query();
+
+        // 2. URLに ?tab=mylist が付いているかどうかをチェック
+        if ($request->input('tab') === 'mylist') {
+            // --- マイリストタブの処理 ---
+
+            // whereHasを使って、ログインしているユーザーがいいねした商品だけに絞り込む
+            $query->whereHas('likes', function($q) {
+                $q->where('user_id', Auth::id());
+            });
+
+        } else {
+            // --- おすすめタブ（デフォルト）の処理 ---
+
+            // もしログインしていれば、自分が出品した商品を除外する
+            if (Auth::check()) {
+                $query->where('user_id', '!=', Auth::id());
+            }
+        }
+
+        // 3. 最後に、準備した条件で、新しい順に商品データを取得する
+        $items = $query->latest()->get();
+
         return view('index',compact('items'));
     }
 

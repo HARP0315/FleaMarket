@@ -12,27 +12,25 @@
 <body>
 <div class="app">
     <header class="header">
-        <a href="/">
-            <img src="" alt="coachtech">
+        <a href="/" class="header-logo">
+            <img src="images/logo.svg" alt="coachtech" class="header-logo__img">
         </a>
         @if (!request()->is('login','register'))
-        <div class="header-nav">
             <form class="search-form" action="/search" method="get">
-                <input type="search" name="keyword" placeholder="なにをお探しですか？" value="{{request('keyword')}}" id="search-input">
+                <input type="search" name="keyword" placeholder="なにをお探しですか？" value="{{request('keyword')}}" id="search-input" class="search-form__input">
             </form>
-            <nav>
-                <ul>
+            <nav class="header-nav">
+                <ul class="header-nav__list">
                     <li>
                         <form action="/logout" method="post">
                             @csrf
                             <input class="logout__link" type="submit" value="ログアウト">
                         </form>
                     </li>
-                    <li><a href="/mypage">マイページ</a></li>
+                    <li><a href="/mypage" class="mypage__link">マイページ</a></li>
                     <li><a href="/sell" class="sell__btn">出品</a></li>
                 </ul>
             </nav>
-        </div>
         @endif
     </header>
     @yield('content')

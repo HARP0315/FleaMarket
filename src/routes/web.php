@@ -23,7 +23,6 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 Route::get('/', [ItemController::class, 'index']);
 Route::get('/search', [ItemController::class, 'search']);
 Route::get('/item/{item_id}',[ItemController::class,'show']);
-// 他に、商品詳細ページなどもここ
 
 // ■ ログインが必要なページ
 Route::middleware('auth')->group(function () {
@@ -39,7 +38,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase/{item_id}',[PurchaseController::class,'store']);
     Route::get('/purchase/address/{item_id}',[PurchaseController::class,'edit']);
     Route::post('/purchase/address/{item_id}',[PurchaseController::class,'update']);
-    // Route::get('/mypage', ...)->name('mypage.index');
-    // Route::get('/sell', ...);
-    // ...など
 });

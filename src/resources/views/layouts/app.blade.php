@@ -13,7 +13,7 @@
 <div class="app">
     <header class="header">
         <a href="/" class="header-logo">
-            <img src="images/logo.svg" alt="coachtech" class="header-logo__img">
+            <img src="{{ asset('images/logo.svg') }}" alt="coachtech" class="header-logo__img">
         </a>
         @if (!request()->is('login','register'))
             <form class="search-form" action="/search" method="get">

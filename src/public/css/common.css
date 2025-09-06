@@ -25,6 +25,7 @@
     background-color: #000;
 }
 
+/* ロゴ */
 .header-logo {
     grid-column: 1;
     margin: 15px 60px 15px 40px;
@@ -35,6 +36,7 @@
     height: 100%;
 }
 
+/* サーチフォーム */
 .search-form{
     grid-column: 2;
     margin: 20px 10px;
@@ -49,6 +51,8 @@
     font-size: 18px;
 }
 
+
+/* ナビ */
 .header-nav {
     grid-column: 3;
     display: flex;
@@ -57,25 +61,24 @@
     padding: 20px;
 }
 
-.header-nav__list{
+.header-nav__list {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     width: 100%;
     padding: 0;
     margin: 0;
     gap: 20px;
     list-style: none;
-    color: #fff;
 }
 
-.header-nav__list li{
-    display: flex;
-    align-items: center;
-    font-size: 20px;
+.mypage__link {
     text-decoration: none;
+    color: #fff;
+    font-size: 18px;
 }
 
-a:visited {
+.header-nav__list:visited {
     color: #fff;
 }
 
@@ -83,25 +86,19 @@ a:visited {
     padding: 0;
     background: none;
     border: none;
-    color: inherit;
-    font-size: inherit;
+    color: #fff;
+    font-size: 18px;
     text-decoration: none;
     cursor: pointer;
 }
 
-.mypage__link{
-    text-decoration: none;
-}
-
 .sell__btn {
     display: inline-block;
-    padding: 8px 20px;
+    padding: 5px 20px;
     border-radius: 3px;
-    background-color: white;
-    border:none;
-    text-decoration: none;
-}
-
-.sell__btn:visited {
     color: #000;
+    background-color: #fff;
+    border: none;
+    font-size: 18px;
+    text-decoration: none;
 }

@@ -13,14 +13,12 @@
     <div class="item-list__content">
         @foreach($items as $item)
         <div class="item-list__item">
-            <a href="/item/{{$item->id}}" class="item-list__item-link">
-                @if(!$item->purchase)
-                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="item-list__item-img">
-                @else
-                    <div class="item-list__sold-box">
-                        <span class="item-list__sold-box--alert">SOLD</span>
-                    </div>
-                @endif
+            <a href="/item/{{$item->id}}"
+               class="item-list__item-link @if($item->purchase)--sold @endif"
+               style="background-image: url({{ $item->image_url }});">
+                <div class="item-list__sold-box">
+                    <span>SOLD</span>
+                </div>
             </a>
             <div class="item-list__item-info">
             <p class=item-list__item-name>{{$item->name}}</p>

@@ -1,0 +1,100 @@
+/* ページ全体のコンテナ */
+.mypage-list {
+    max-width: 960px; /* コンテンツの最大幅 */
+    margin: 40px auto; /* 上下に余白、左右中央揃え */
+    padding: 0 20px; /* 左右に少し余白 */
+}
+
+/* --- ヘッディングエリア --- */
+.mypage-list__heading {
+    display: flex; /* Flexboxで横並びにする */
+    justify-content: space-between; /* 両端に寄せる */
+    align-items: center; /* 垂直方向の中央揃え */
+    margin-bottom: 40px;
+}
+
+/* 画像と名前をまとめるグループ */
+.mypage-list__user-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 画像と名前の間の隙間 */
+}
+
+/* プロフィール画像（円形） */
+.mypage-list__user-img,
+.mypage-list__user-img--alternative {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; /* 正円にする */
+    background-color: #f0f0f0; /* 代替表示の背景色 */
+    object-fit: cover; /* 画像が引き伸ばされないように */
+}
+
+/* ユーザー名 */
+.mypage-list__user-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* プロフィール編集ボタン */
+.mypage-list__profile-button {
+    padding: 10px 20px;
+    border: 1px solid red;
+    color: red;
+    background-color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* --- タブエリア --- */
+.mypage-list__tab {
+    display: flex; /* Flexboxで横並び */
+    gap: 40px; /* タブ間の隙間 */
+    border-bottom: 1px solid #ccc;
+}
+
+.mypage-list__tab-link {
+    padding: 10px 0;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 3px solid transparent; /* 透明な下線を仕込んでおく */
+}
+
+/* アクティブなタブのスタイル */
+.mypage-list__tab-link--active {
+    color: red;
+    border-bottom-color: red;
+}
+
+/* --- 商品一覧エリア --- */
+.mypage-list__content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 横に4つのカラム */
+    gap: 20px; /* アイテム間の隙間 */
+    margin-top: 30px;
+}
+
+/* 各商品アイテムのリンク（画像エリア） */
+.mypage-list__item-link {
+    display: block;
+    position: relative; /* SOLD表示を重ねるための基準 */
+}
+
+.mypage-list__item-img {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 画像を正方形に保つ */
+    object-fit: cover;
+}
+
+/* SOLDボックスのスタイル */
+.mypage-list__sold-box {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* 正方形に保つ */
+    background-color: gainsboro;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}

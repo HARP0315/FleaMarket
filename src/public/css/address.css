@@ -1,0 +1,57 @@
+/* フォーム全体を囲むコンテナ */
+.address-form {
+    max-width: 500px; /* ログインフォームなどと同じ幅 */
+    margin: 60px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+/* 「住所の変更」の見出し */
+.address-form__ttl {
+    text-align: center;
+    font-size: 24px;
+    margin: 0 0 40px 0;
+}
+
+/* 各入力項目をまとめるグループ */
+.address-form__group {
+    margin-bottom: 25px;
+}
+
+/* ラベルのスタイル */
+.address-form__label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* 入力欄のスタイル */
+.address-form__input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* paddingを含めた幅計算にする */
+}
+
+/* 更新ボタンのスタイル */
+.address-form__submit {
+    width: 100%;
+    padding: 15px;
+    background-color: #ff5722; /* デザインに合わせた赤色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+/* バリデーションエラーメッセージ */
+.address-form__error-message {
+    color: #dc3545; /* 一般的なエラー色 */
+    font-size: 14px;
+    margin-top: 5px;
+}

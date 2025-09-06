@@ -1,0 +1,119 @@
+/* ページ全体のコンテナ */
+.purchase-page {
+    max-width: 900px; /* 少し広めの幅 */
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* formをFlexboxコンテナにして左右に配置 */
+.purchase-page form {
+    display: flex;
+    gap: 40px; /* 左右のエリア間の隙間 */
+}
+
+/* ページ左側のメインエリア */
+.purchase-page__main {
+    flex: 2; /* 右側より少し広い幅を取る */
+}
+
+/* 各セクションを区切るグループ */
+.purchase-page__group {
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 商品情報エリア */
+.purchase-page__group:first-child {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.purchase-page__item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.purchase-page__item-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+.purchase-page__item-price {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* 支払い方法・配送先エリア */
+.purchase-page__label,
+.purchase-page__address-ttl {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.purchase-page__payment-select {
+    width: 200px;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.shipping-address__change-link {
+    display: block;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+/* ページ右側のサマリーエリア */
+.purchase-page__summary {
+    flex: 1; /* 左側より少し狭い幅を取る */
+}
+
+.summary-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-box__list {
+    margin: 0;
+    padding: 0;
+}
+
+.summary-box__item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.summary-box__item dt { /* 項目名 */
+    font-weight: bold;
+}
+
+.summary-box__item dd { /* データ */
+    margin: 0;
+}
+
+.summary-box__submit-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* バリデーションエラーメッセージ */
+.purchase-page__error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 10px;
+}

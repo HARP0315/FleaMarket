@@ -12,19 +12,21 @@
         @method('PATCH')
         <div class="profile-form__group">
             <div class="profile-form__user-img-area">
-                @if($user->img)
-                    <img src="{{asset('storage/' . $user->img)}}" alt="画像">
-                @else
-                    <div class="profile-form__user-img--alternative"></div>
-                @endif
+                <div class="profile-form__user-img-display">
+                    @if($user->img)
+                        <img src="{{asset('storage/' . $user->img)}}" alt="画像">
+                    @else
+                        <div class="profile-form__user-img--alternative"></div>
+                    @endif
+                </div>
                 <label for="img" class="profile-form__img-select-btn btn">画像を選択する</label>
                 <input type="file" accept="image/jpeg, image/png"  name="img" id="img" class="profile-form__file-input">
-                <p class="profile-form__error-message">
-                    @error('img')
-                        {{ $message }}
-                    @enderror
-                </p>
             </div>
+            <p class="profile-form__error-message">
+                @error('img')
+                    {{ $message }}
+                @enderror
+            </p>
         </div>
         <div class="profile-form__group">
             <label for="name" class="profile-form__label form__label">ユーザー名</label>

@@ -7,13 +7,12 @@
 @section('content')
 <div class="mypage-list">
     <div class="mypage-list__heading">
-        <div class="mypage-list__heading-user-img">
-            @if($user->img)
-                <img src="{{asset('storage/' . $user->img)}}" alt="画像">
-            @else
-                <div class="mypage-list__heading-user-img--alternative"></div>
-            @endif
-        </div>
+        <div class="mypage-list__user-img-display"
+         @if($user->img)
+             style="background-image: url({{ asset('storage/' . $user->img) }});"
+         @endif
+        >
+    </div>
         <div class="mypage-list__heading-user-name">
             <p class="mypage-list__user-name">{{$user->name}}</p>
         </div>
@@ -28,14 +27,13 @@
     <div class="mypage-list__content">
         @foreach($items as $item)
         <div class="mypage-list__item">
-            <a href="/item/{{$item->id}}" class="mypage-list__item-link">
-                @if(request()->query('page', 'sell') === 'sell' && $item->purchase)
-                    <div class="mypage-list__sold-box">
-                        <span class="mypage-list__sold-box--alert">SOLD</span>
-                    </div>
-                @else
-                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="mypage-list__item-img">
-                @endif
+                        <a href="/item/{{$item->id}}"
+               class="mypage-list__item-link @if(request()->query('page', 'sell') === 'sell' && $item->purchase)--sold @endif"
+                 style="background-image: url({{ $item->image_url }});"
+            >
+                <div class="mypage-list__sold-box">
+                    <span>SOLD</span>
+                </div>
             </a>
             <div class="mypage-list__item-info">
             <p class=mypage-list__item-name>{{$item->name}}</p>

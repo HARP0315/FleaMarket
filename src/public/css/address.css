@@ -1,6 +1,5 @@
-/* フォーム全体を囲むコンテナ */
 .address-form {
-    max-width: 500px; /* ログインフォームなどと同じ幅 */
+    max-width: 500px;
     margin: 60px auto;
     padding: 40px;
     background-color: #fff;

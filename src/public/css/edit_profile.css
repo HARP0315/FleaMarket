@@ -1,67 +1,52 @@
-.profile-form__file-input {
-    /* 完全に画面の外に隠す */
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-    opacity: 0;
-}
 
-/* フォーム全体を囲むコンテナ */
 .profile-form {
-    max-width: 600px; /* 少し幅を広めに */
-    margin: 60px auto;
-    padding: 40px;
+    width: 45%;
+    margin: 20px auto;
+    padding: 20px;
     background-color: #fff;
-    border-radius: 5px;
 }
 
-/* 「プロフィール設定」の見出し */
 .profile-form__ttl {
     text-align: center;
     font-size: 24px;
     margin: 0 0 40px 0;
 }
 
-/* 各入力項目をまとめるグループ */
 .profile-form__group {
-    margin-bottom: 25px;
-}
-
-/* 画像アップロードエリア */
-.profile-form__user-img-area {
-    text-align: center; /* 中の要素を中央揃え */
     margin-bottom: 30px;
 }
 
-/* 表示される画像（円形） */
-.profile-form__user-img-area img,
-.profile-form__user-img--alternative {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%; /* 正円にする */
-    background-color: #f0f0f0; /* 代替表示の背景色 */
-    margin: 0 auto 20px; /* 画像の下に余白 */
-    display: block;
-    object-fit: cover; /* 画像が引き伸ばされないように */
+.profile-form__user-img-area {
+    display: flex;
+    align-items: center;
 }
 
-/* 「画像を選択する」ボタンに見せるラベル */
+.profile-form__user-img-display img,
+.profile-form__user-img--alternative {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: block;
+    object-fit: cover;
+}
+
 .profile-form__img-select-btn {
     display: inline-block;
+    margin-left: 30px;
     padding: 8px 16px;
-    border: 1px solid #ff5722;
-    color: #ff5722;
+    border: 2px solid #ff5e5d;
+    border-radius: 8px;
+    color: #ff5e5d;
     background-color: #fff;
-    border-radius: 5px;
     cursor: pointer;
 }
 
-/* 実際のファイル選択inputは隠す */
+/* ファイル選択inputは隠す */
 .profile-form__file-input {
     display: none;
 }
 
-/* ラベルのスタイル */
 .profile-form__label {
     display: block;
     margin-bottom: 5px;
@@ -72,23 +57,22 @@
 .profile-form__input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #afafaf;
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
 }
 
-/* 送信ボタンのスタイル */
 .profile-form__submit {
     width: 100%;
+    margin-top: 30px;
     padding: 15px;
-    background-color: #ff5722;
-    color: white;
+    background-color: #ff5e5d;
+    color: #fff;
     border: none;
     border-radius: 5px;
     font-size: 18px;
     cursor: pointer;
-    margin-top: 30px;
 }
 
 /* バリデーションエラーメッセージ */

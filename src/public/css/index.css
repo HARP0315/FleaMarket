@@ -44,7 +44,6 @@
     overflow: hidden;
 }
 
-/* soldボックス */
 .item-list__sold-box{
     position: absolute;
     top: 0;

@@ -53,14 +53,12 @@
     font-weight: bold;
 }
 
-/* 入力欄のスタイル */
 .profile-form__input {
     width: 100%;
     padding: 10px;
     border: 1px solid #afafaf;
     border-radius: 5px;
     font-size: 16px;
-    box-sizing: border-box;
 }
 
 .profile-form__submit {

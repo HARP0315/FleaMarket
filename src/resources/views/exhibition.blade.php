@@ -14,10 +14,10 @@
                 <img id="image-preview" src="" alt="商品画像" class="exhibition-form__img-preview">
                 <label for="img" class="exhibition-form__label--select">画像を選択する</label>
                 <input type="file" accept="image/jpeg, image/png" name="img" id="img" class="exhibition-form__file-input">
-                @error('img')
-                    <p class="exhibition-form__error-message">{{ $message }}</p>
-                @enderror
             </div>
+            @error('img')
+                <p class="exhibition-form__error-message">{{ $message }}</p>
+            @enderror
         </div>
         <div class="exhibition-form__group">
             <h3 class="exhibition-form__sub-ttl--heading">商品の詳細</h3>
@@ -32,10 +32,10 @@
                             <label for="category-{{ $category->id }}" class="exhibition-form__category-label">{{ $category->content }}</label>
                         </div>
                     @endforeach
-                    @error('categories')
-                        <p class="exhibition-form__error-message">{{ $message }}</p>
-                    @enderror
                 </div>
+                @error('categories')
+                    <p class="exhibition-form__error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div class="exhibition-form__detail-area details-list">
                 <label for="condition" class="exhibition-form__label">商品の状態</label>
@@ -47,7 +47,7 @@
                         >{{$value}}</option>
                     @endforeach
                 </select>
-                @error('condition_id')
+                @error('condition')
                     <p class="exhibition-form__error-message">{{ $message }}</p>
                 @enderror
             </div>

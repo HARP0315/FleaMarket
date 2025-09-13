@@ -31,6 +31,15 @@
     object-fit: cover;
 }
 
+.profile-form__user-img-display {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    background-size: cover;
+    background-position: center;
+}
+
 .profile-form__img-select-btn {
     display: inline-block;
     margin-left: 30px;

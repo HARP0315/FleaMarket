@@ -74,7 +74,7 @@
 .purchase-page__payment-content::after {
     position: absolute;
     top: 85%;
-    left: 40%;
+    left: 45%;
     width: 0;
     height: 0;
     border-top: 10px solid #5f5f5f;

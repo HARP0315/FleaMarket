@@ -81,41 +81,41 @@
                     </div>
                 </dl>
             </div>
-        </div>
-    </div>
 
-    {{-- コメントエリア --}}
-    <div class="item-page__comment-area" id="comment-area">
-        <h3 class="item-page__sub-ttl">コメント（{{ $item->comments->count() }}件）</h3>
-        <div class="item-page__comment-list">
-            @foreach($comments as $comment)
-                <div class="comment-item">
-                    @if($comment->user->img)
-                        <img src="{{ asset('storage/'.$comment->user->img) }}" alt="画像" class="comment-item__user-img">
-                    @else
-                        <div class="comment-item__user-img--alternative"></div>
+            <div class="item-page__comment-area" id="comment-area">
+                <h3 class="item-page__sub-ttl-comment">コメント（{{ $item->comments->count() }}）</h3>
+                <div class="item-page__comment-list">
+                    @foreach($comments as $comment)
+                        <div class="comment-item">
+                            @if($comment->user->img)
+                                <img src="{{ asset('storage/'.$comment->user->img) }}" alt="画像" class="comment-item__user-img">
+                            @else
+                                <div class="comment-item__user-img--alternative"></div>
+                            @endif
+                            <span class="comment-item__user-name">{{ $comment->user->name }}</span>
+                        </div>
+                        <p class="comment-item__content">{{ $comment->content }}</p>
+                    @endforeach
+                </div>
+
+                {{-- コメント投稿フォームの分岐 --}}
+                @auth {{-- ログインしているか --}}
+                    @if(!$item->purchase) {{-- かつ、売り切れていないか --}}
+                        <div class="item-page__comment-form">
+                            <form action="/item/{{ $item->id }}/comments" method="post">
+                                @csrf
+                                <label for="content" class="item-page_comment-form-label">商品へのコメント</label>
+                                <textarea name="content" id=content class="item-page__comment-textarea" placeholder="コメントを入力"></textarea>
+                                <input type="submit" class="item-page__comment-submit" value="コメントを送信する">
+                            @error('content')
+                                <p class="item-page__error-message">{{ $message }}</p>
+                            @enderror
+                            </form>
+                        </div>
                     @endif
-                    <span class="comment-item__user-name">{{ $comment->user->name }}</span>
-                    <p class="comment-item__content">{{ $comment->content }}</p>
-                </div>
-            @endforeach
+                @endauth
+            </div>
         </div>
-
-        {{-- コメント投稿フォームの分岐 --}}
-        @auth {{-- ログインしているか --}}
-            @if(!$item->purchase) {{-- かつ、売り切れていないか --}}
-                <div class="item-page__comment-form">
-                    <form action="/item/{{ $item->id }}/comments" method="post">
-                        @csrf
-                        <textarea name="content" class="item-page__comment-textarea" placeholder="コメントを入力"></textarea>
-                        <input type="submit" class="item-page__comment-submit" value="コメントを送信する">
-                    @error('content')
-                        <p class="item-page__error-message">{{ $message }}</p>
-                    @enderror
-                    </form>
-                </div>
-            @endif
-        @endauth
     </div>
 </div>
 @endsection

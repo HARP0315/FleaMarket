@@ -11,21 +11,22 @@
         @csrf
         <div class="exhibition-form__group">
             <div class="exhibition-form__item-img-area">
-                <label for="img" class="exhibition-form__label form__label">画像を選択する</label>
-                <input type="file" accept="image/jpeg, image/png"  name="img" id="img" class="exhibition-form__file-input">
+                <img id="image-preview" src="" alt="商品画像" class="exhibition-form__img-preview">
+                <label for="img" class="exhibition-form__label--select">画像を選択する</label>
+                <input type="file" accept="image/jpeg, image/png" name="img" id="img" class="exhibition-form__file-input">
                 @error('img')
                     <p class="exhibition-form__error-message">{{ $message }}</p>
                 @enderror
             </div>
         </div>
         <div class="exhibition-form__group">
-            <h3 class="exhibition-form__sub-ttl">商品の詳細</h3>
+            <h3 class="exhibition-form__sub-ttl--heading">商品の詳細</h3>
             <div class="exhibition-form__detail-area">
                 <label class="exhibition-form__label">カテゴリー</label>
                 <div class="exhibition-form__category-list">
                     @foreach($categories as $category)
                         <div class="exhibition-form__category-item">
-                            <input type="checkbox" name="categories[]" id="category-{{ $category->id }}" value="{{ $category->id }}"
+                            <input type="checkbox" name="categories[]" id="category-{{ $category->id }}" class="exhibition-form__category-input" value="{{ $category->id }}"
                              @if(is_array(old('categories')) && in_array($category->id, old('categories'))) checked @endif
                             >
                             <label for="category-{{ $category->id }}" class="exhibition-form__category-label">{{ $category->content }}</label>
@@ -36,13 +37,13 @@
                     @enderror
                 </div>
             </div>
-            <div class="exhibition-form__detail-area">
+            <div class="exhibition-form__detail-area details-list">
                 <label for="condition" class="exhibition-form__label">商品の状態</label>
                 <select name="condition" id="condition" class="exhibition-form__select">
                     <option disabled selected>選択してください</option>
                     @foreach(config('const.conditions.conditions') as $key => $value)
                         <option value="{{ $key }}"
-                         @if(old('condition') == $key) selected @endif
+                        @if(old('condition') == $key) selected @endif
                         >{{$value}}</option>
                     @endforeach
                 </select>
@@ -52,7 +53,7 @@
             </div>
         </div>
         <div class="exhibition-form__group">
-            <h3 class="exhibition-form__sub-ttl">商品名と説明</h3>
+            <h3 class="exhibition-form__sub-ttl--heading">商品名と説明</h3>
             <div class="exhibition-form__detail-area">
                 <label for="name" class="exhibition-form__label">商品名</label>
                 <input type="text" name="name" id="name" class="exhibition-form__input" value="{{ old('name') }}">
@@ -74,11 +75,8 @@
                     <p class="exhibition-form__error-message">{{ $message }}</p>
                 @enderror
             </div>
-        </div>
-        <div class="exhibition-form__group">
             <h3 class="exhibition-form__sub-ttl">販売価格</h3>
             <div class="exhibition-form__detail-area">
-                <label for="price" class="exhibition-form__label">販売価格</label>
                 <div class="exhibition-form__price-box">
                     <span>¥</span>
                     {{-- ボックスの前に擬似で￥つけるからあとで消す --}}
@@ -93,4 +91,32 @@
     </form>
 </div>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. 必要なHTML要素を取得する
+        const imageInput = document.getElementById('img'); // ファイル選択input
+        const imagePreview = document.getElementById('image-preview'); // プレビューimg
+        const selectLabel = document.querySelector('.exhibition-form__label--select'); // 「画像を選択」ラベル
+
+        // 2. ファイルが選択されたら、中の処理を実行
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                // 3. FileReaderで画像を読み込む
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // 4. プレビューimgのsrcを、読み込んだ画像データに書き換える
+                    imagePreview.src = e.target.result;
+
+                    // 5. プレビューimgを表示し、「画像を選択」ラベルを隠す
+                    imagePreview.style.display = 'block';
+                    selectLabel.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 @endsection

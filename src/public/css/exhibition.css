@@ -1,110 +1,142 @@
-/* フォーム全体を囲むコンテナ */
+
 .exhibition-form {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 40px;
+    width: 45%;
+    margin: 20px auto;
+    padding: 20px;
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 「商品の出品」の見出し */
 .exhibition-form__ttl {
     text-align: center;
     font-size: 24px;
     margin: 0 0 40px 0;
 }
 
-/* 各セクションをまとめるグループ */
 .exhibition-form__group {
     margin-bottom: 30px;
     padding-bottom: 30px;
-    border-bottom: 1px solid #eee;
 }
 
-/* 各セクションの見出し（h3） */
-.exhibition-form__sub-ttl {
-    font-size: 18px;
+.exhibition-form__sub-ttl--heading{
+    border-bottom: 1px solid #ccc;
+    color: #696969;
+    font-size: 22px;
     margin: 0 0 20px 0;
 }
 
-/* 各入力項目エリア */
-.exhibition-form__detail-area {
-    margin-bottom: 20px;
+.exhibition-form__sub-ttl {
+    font-size: 18px;
+    margin: 0 0 5px 0;
 }
 
-/* ラベルのスタイル */
+.exhibition-form__item-img-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    text-align: center;
+    border: 1px dashed #ccc;
+    background-color: #fff;
+}
+
+/* プレビュー画像のスタイル */
+.exhibition-form__img-preview {
+    display: none; /* ★ 普段は隠しておく */
+    max-width: 100%; /* 横幅はエリアをはみ出さない */
+    max-height: 150px; /* ★ 高さはエリアをはみ出さない */
+    object-fit: contain; /* ★ アスペクト比を維持して、エリア内に収める */
+}
+
+.exhibition-form__label--select{
+    display: block;
+    width: 25%;
+    padding: 5px 5px;
+    border: 2px solid #ff5e5d;
+    border-radius: 7px;
+    color: #ff5e5d;
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
 .exhibition-form__label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
 
-/* --- 画像アップロード --- */
-.exhibition-form__item-img-area {
-    border: 2px dashed #ccc;
-    padding: 30px;
-    text-align: center;
-}
-
-.exhibition-form__img-select-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 1px solid red;
-    color: red;
-    background-color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .exhibition-form__file-input {
     display: none; /* input自体は隠す */
 }
 
-
-/* --- カテゴリー選択 --- */
 .exhibition-form__category-list {
     display: flex;
+    margin-bottom: 30px;
     flex-wrap: wrap; /* 折り返す */
     gap: 10px; /* ボタン間の隙間 */
 }
 
 .exhibition-form__category-input {
-    display: none; /* チェックボックス自体は隠す */
+    display: none;
 }
 
 .exhibition-form__category-label {
     display: inline-block;
-    padding: 8px 16px;
-    border: 1px solid #ccc;
+    margin: 10px 3px;
+    padding: 3px 10px;
+    border: 2px solid #ff5e5d;
     border-radius: 20px; /* 楕円形にする */
+    color: #ff5e5d;
     cursor: pointer;
-    transition: all 0.2s;
 }
 
 /* チェックされたときのラベルのスタイル */
 .exhibition-form__category-input:checked + .exhibition-form__category-label {
-    background-color: red;
-    color: white;
-    border-color: red;
+    background-color:#ff5e5d;
+    color: #fff;
+    border-color: #ff5e5d;
 }
-
 
 /* --- その他の入力欄 --- */
 .exhibition-form__select,
 .exhibition-form__input,
 .exhibition-form__textarea {
     width: 100%;
+    margin-bottom: 5px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    box-sizing: border-box;
+}
+
+.details-list {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.details-list::after{
+    position: absolute;
+    top: 70%;
+    left: 95%;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #5f5f5f;
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: "";
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.exhibition-form__select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .exhibition-form__textarea {
     height: 120px;
-    resize: vertical; /* 縦方向だけリサイズ可能に */
 }
 
 /* 販売価格 */
@@ -114,10 +146,12 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
 .exhibition-form__price-box span {
     padding: 10px;
-    background-color: #f5f5f5;
+    font-weight: bold;
 }
+
 .exhibition-form__price-input {
     width: 100%;
     padding: 10px;
@@ -128,12 +162,13 @@
 /* 出品ボタン */
 .exhibition-form__submit {
     width: 100%;
-    padding: 15px;
-    background-color: #ff5722;
-    color: white;
+    padding: 10px;
     border: none;
     border-radius: 5px;
+    background-color: #ff5722;
+    color: #fff;
     font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
 }
 

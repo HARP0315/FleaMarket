@@ -12,16 +12,19 @@
         @method('PATCH')
         <div class="profile-form__group">
             <div class="profile-form__user-img-area">
-                <div class="profile-form__user-img-display">
-                    @if($user->img)
-                        <img src="{{asset('storage/' . $user->img)}}" alt="画像">
-                    @else
-                        <div class="profile-form__user-img--alternative"></div>
-                    @endif
+                <div id="image-preview-container"
+                    class="profile-form__user-img-display"
+                     @if($user->img)
+                        style="background-image: url({{ asset('storage/' . $user->img) }});"
+                     @endif
+                >
                 </div>
-                <label for="img" class="profile-form__img-select-btn btn">画像を選択する</label>
-                <input type="file" accept="image/jpeg, image/png"  name="img" id="img" class="profile-form__file-input">
-            </div>
+                <label for="img-input" class="profile-form__img-select-btn btn">画像を選択する</label>
+                <input type="file" accept="image/jpeg, image/png" name="img" id="img-input" class="profile-form__file-input">
+    @error('img')
+        <p class="profile-form__error-message">{{ $message }}</p>
+    @enderror
+</div>
             <p class="profile-form__error-message">
                 @error('img')
                     {{ $message }}
@@ -67,5 +70,25 @@
         <input type="submit" value="更新する" class="profile-form__submit">
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('img-input');
+        // ▼ ターゲットを新しいdivのIDに変更
+        const imagePreviewContainer = document.getElementById('image-preview-container');
+
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // ▼ srcを書き換えるのではなく、backgroundImageを書き換える
+                    imagePreviewContainer.style.backgroundImage = `url(${e.target.result})`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 
 @endsection

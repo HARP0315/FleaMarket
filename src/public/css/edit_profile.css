@@ -12,6 +12,14 @@
     margin: 0 0 40px 0;
 }
 
+.profile-form__success-message--flash{
+    display: inline-block;
+    margin-bottom: 10px;
+    color:#dc3545;
+    background:linear-gradient(transparent 75%,#ffdead 75%);
+    font-size: 20px;
+}
+
 .profile-form__group {
     margin-bottom: 30px;
 }

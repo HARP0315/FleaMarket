@@ -7,6 +7,13 @@
 @section('content')
 <div class="profile-form">
     <h2 class="profile-form__ttl">プロフィール設定</h2>
+        {{-- もし、'success'という名前のセッションメッセージがあれば --}}
+    @if (session('success'))
+        <div class="profile-form__success-message--flash">
+            {{ session('success') }}
+        </div>
+    @endif
+    {{-- ▲▲▲ ここまで ▲▲▲ --}}
     <form action="/mypage/profile" method="post" enctype="multipart/form-data" class="profile-form__inner">
         @csrf
         @method('PATCH')
@@ -21,10 +28,7 @@
                 </div>
                 <label for="img-input" class="profile-form__img-select-btn btn">画像を選択する</label>
                 <input type="file" accept="image/jpeg, image/png" name="img" id="img-input" class="profile-form__file-input">
-    @error('img')
-        <p class="profile-form__error-message">{{ $message }}</p>
-    @enderror
-</div>
+            </div>
             <p class="profile-form__error-message">
                 @error('img')
                     {{ $message }}

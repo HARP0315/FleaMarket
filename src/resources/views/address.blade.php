@@ -11,21 +11,21 @@
         @csrf
         <div class="address-form__group">
             <label for="post_code" class="address-form__label form__label">郵便番号</label>
-            <input type="text" name="post_code" id="post_code" class="address-form__input" value="{{ old('post_code', $user->post_code) }}">
+            <input type="text" name="post_code" id="post_code" class="address-form__input" value="{{ old('post_code', $address->post_code) }}">
             @error('post_code')
                 <p class="address-form__error-message">{{ $message }}</p>
             @enderror
         </div>
         <div class="address-form__group">
             <label for="address" class="address-form__label form__label">住所</label>
-            <input type="text" name="address" id="address" class="address-form__input" value="{{ old('address',$user->address) }}">
+            <input type="text" name="address" id="address" class="address-form__input" value="{{ old('address',$address->address) }}">
             @error('address')
                 <p class="address-form__error-message">{{ $message }}</p>
             @enderror
         </div>
         <div class="address-form__group">
             <label for="building" class="address-form__label form__label">建物名</label>
-            <input type="text" name="building" id="building" class="address-form__input" value="{{ old('building',$user->building) }}">
+            <input type="text" name="building" id="building" class="address-form__input" value="{{ old('building',$address->building) }}">
         </div>
         <input type="submit" value="更新する" class="address-form__submit">
     </form>

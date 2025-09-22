@@ -40,16 +40,18 @@
                     <a href="/purchase/address/{{$item->id}}" class="shipping-address__change-link">変更する</a>
                 </div>
                 <div class="purchase-page__address-content">
-                    <p>〒{{ $address->post_code }}</p>
-                    <p>{{ $address->address }}</p>
-                    <p>{{ $address->building }}</p>
+                    <p>〒{{ $address?->post_code }}</p>
+                    <p>{{ $address?->address }}</p>
+                    <p>{{ $address?->building }}</p>
                 </div>
                 <input type="hidden" name="post_code" value="{{ $address->post_code }}">
                 <input type="hidden" name="address" value="{{ $address->address }}">
-                <input type="hidden" name="address" value="{{ $address->building }}">
-                @error('address')
-                    <p class="purchase-page__error-message">{{ $message }}</p>
-                @enderror
+                <input type="hidden" name="building" value="{{ $address->building }}">
+                @if ($errors->has('post_code'))
+                    <p class="purchase-page__error-message">{{ $errors->first('post_code') }}</p>
+                @elseif ($errors->has('address'))
+                    <p class="purchase-page__error-message">{{ $errors->first('address') }}</p>
+                @endif
             </div>
         </div>
 

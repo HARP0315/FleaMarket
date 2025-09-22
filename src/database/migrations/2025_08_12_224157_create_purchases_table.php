@@ -15,11 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('address_id')->constrained()->cascadeOnDelete();
             $table->integer('price');
             $table->tinyInteger('payment_method');
-            $table->string('post_code', 255);
-            $table->string('address', 255);
-            $table->string('building',255)->nullable();
             $table->timestamps();
         });
     }

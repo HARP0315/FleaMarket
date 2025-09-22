@@ -12,6 +12,10 @@ class CommentController extends Controller
 {
     public function store(CommentRequest $request,Item $item)
     {
+        if (Auth::guest()) {
+            return back()->with('comment_error', 'コメントを投稿するには、ログインが必要です');
+        }
+
         $form = $request->validated();
         $form['user_id'] = Auth::id();
         $item->comments()->create($form);

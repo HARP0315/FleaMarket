@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\AddressRequest;
+use App\Models\User;
 use App\Models\Purchase;
 use App\Models\Address;
 use App\Models\Item;
@@ -13,56 +14,91 @@ use Illuminate\Support\Facades\Auth;
 class PurchaseController extends Controller
 {
 
+        private function getCurrentAddress(Request $request)
+    {
+        $user = Auth::user();
+
+        // 【優先順位1】セッションに「一時的な住所」があるか？
+        $temporaryAddress = $request->session()->get('temporary_address');
+        if ($temporaryAddress) {
+            // あれば、それを使って仮のAddressオブジェクトを返す
+            return new Address($temporaryAddress);
+        }
+
+        // 【優先順位2】addressesテーブルに、過去に使った住所があるか？
+        $latestAddress = $user->shippingAddress()->latest()->first();
+        if ($latestAddress) {
+            // あれば、その最新の住所を返す
+            return $latestAddress;
+        }
+
+        // 【優先順位3】usersテーブルの「デフォルト住所」を使う
+        // usersテーブルのカラムから、仮のAddressオブジェクトを作成して返す
+        return new Address([
+            'post_code' => $user->post_code,
+            'address'   => $user->address,
+            'building'  => $user->building,
+        ]);
+    }
+
     public function create(Request $request,$item_id)
     {
         $item = Item::findOrFail($item_id);
         $user = Auth::user();
 
-        $address = $user;
-
-        if($request->has('address_id')){
-            $shippingAddress = Address::where('user_id',$user->id)
-                ->where('id',$request->address_id)
-                ->first();
-
-            if ($shippingAddress) {
-                $address = $shippingAddress;
-            }
-        };
+        $address = $this->getCurrentAddress($request);
 
         return view('purchase',compact('item','address'));
     }
 
     public function store(PurchaseRequest $request,$item_id)
     {
-        //  必要なもの：user_id,item_id,request
-        $form = $request->validated();
-        $form['user_id']=Auth::id();
-        $form['item_id']=$item_id;
 
-        Purchase::create($form);
+        $user = Auth::user();
+        $item = Item::findOrFail($item_id);
+        $form = $request->validated();
+
+        // フォームから送られてきた住所データを取得
+        $shippingAddress = [
+            'user_id' => $user->id,
+            'post_code' => $form['post_code'],
+            'address' => $form['address'],
+            'building' => $form['building'] ?? null,
+        ];
+
+        // ★★★ このタイミングで、firstOrCreateを使って住所を保存 ★★★
+        $address = Address::firstOrCreate($shippingAddress);
+
+        // 購入情報を保存
+        $user->purchases()->create([
+            'item_id' => $item->id,
+            'address_id' => $address->id,
+            'price' => $item->price,
+            'payment_method' => $form['payment_method'],
+        ]);
+
+        // ★★★ 使った一時的な住所をセッションから削除 ★★★
+        $request->session()->forget('temporary_address');
 
         return redirect('/');
+
     }
 
-    public function edit($item_id)
+    public function edit(Request $request,$item_id)
     {
-        $user = Auth::user();
-        $item = Item::find($item_id);
+        $item = Item::findOrFail($item_id);
+        $address = $this->getCurrentAddress($request);
 
-        return view('address',compact('user','item'));
+        return view('address',compact('item','address'));
     }
 
     public function update(AddressRequest $request,$item_id)
     {
 
-        $form = $request->validated();
+        $address = $request->validated();
+        $request->session()->put('temporary_address', $address);
 
-        $form['user_id'] = Auth::id();
-        $address = Address::firstOrCreate($form);
-
-        return redirect('/purchase' .'/'. $item_id .'?address_id='. $address->id);
-
+        return redirect('/purchase/' . $item_id);
     }
 
 }

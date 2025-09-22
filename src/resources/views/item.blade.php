@@ -99,7 +99,6 @@
                 </div>
 
                 {{-- コメント投稿フォームの分岐 --}}
-                @auth {{-- ログインしているか --}}
                     @if(!$item->purchase) {{-- かつ、売り切れていないか --}}
                         <div class="item-page__comment-form">
                             <form action="/item/{{ $item->id }}/comments" method="post">
@@ -110,10 +109,14 @@
                             @error('content')
                                 <p class="item-page__error-message">{{ $message }}</p>
                             @enderror
+                            @if (session('comment_error'))
+                                <div class="item-page__error-message--flash">
+                                    {{ session('comment_error') }}
+                                </div>
+                            @endif
                             </form>
                         </div>
                     @endif
-                @endauth
             </div>
         </div>
     </div>

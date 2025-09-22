@@ -27,4 +27,9 @@ class Purchase extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function shippingAddress()
+    {
+        return $this->belongsTo(Address::class);
+    }
 }

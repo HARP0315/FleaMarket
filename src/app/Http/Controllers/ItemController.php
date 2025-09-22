@@ -17,42 +17,29 @@ class ItemController extends Controller
         // 1. まず、Itemを取得するためのクエリの準備を始める
         $query = Item::query();
 
-        // 2. URLに ?tab=mylist が付いているかどうかをチェック
-        if ($request->input('tab') === 'mylist') {
-            // --- マイリストタブの処理 ---
+        if (!empty($request->keyword)) {
+            $keyword = $request->input('keyword');
+            $query->where('name', 'like', '%' . $keyword . '%');
+        }
 
+        // 3. URLに ?tab=mylist が付いているかどうかをチェック
+        if ($request->input('tab') === 'mylist') {
             // whereHasを使って、ログインしているユーザーがいいねした商品だけに絞り込む
             $query->whereHas('likes', function($q) {
                 $q->where('user_id', Auth::id());
             });
 
         } else {
-            // --- おすすめタブ（デフォルト）の処理 ---
-
             // もしログインしていれば、自分が出品した商品を除外する
             if (Auth::check()) {
                 $query->where('user_id', '!=', Auth::id());
             }
         }
 
-        // 3. 最後に、準備した条件で、新しい順に商品データを取得する
+        // 4. 最後に、準備した全ての条件で、新しい順に商品データを取得する
         $items = $query->latest()->get();
 
-        return view('index',compact('items'));
-    }
-
-    public function search(Request $request)
-    {
-
-        $keyword = $request->input('keyword');
-        $query = Item::query();
-
-        if(!empty($request->keyword)){
-            $query->where('name','like','%'.$request->keyword.'%');
-        }
-
-        $items = $query->get();
-        return view('index',compact('items'));
+        return view('index', compact('items'));
 
     }
 

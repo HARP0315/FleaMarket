@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -36,6 +37,7 @@ class UserController extends Controller
 
     public function update(ProfileRequest $request){
 
+        $user = Auth::user();
         $form = $request->validated();
 
         // 2. もし画像ファイルが送信されてきたら、保存処理を行う
@@ -47,9 +49,9 @@ class UserController extends Controller
     }
 
         // 3. ログインしているユーザー自身の情報を更新する
-        Auth::user()->update($form);
+        $user->update($form);
 
-        return redirect('/mypage/profile');
+        return redirect('/mypage/profile')->with('success', 'プロフィールを更新しました！');
 
     }
 }

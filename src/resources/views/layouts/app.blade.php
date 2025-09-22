@@ -16,17 +16,22 @@
             <img src="{{ asset('images/logo.svg') }}" alt="coachtech" class="header-logo__img">
         </a>
         @if (!request()->is('login','register'))
-            <form class="search-form" action="/search" method="get">
+            <form class="search-form" action="/" method="get">
                 <input type="search" name="keyword" placeholder="なにをお探しですか？" value="{{request('keyword')}}" id="search-input" class="search-form__input">
             </form>
             <nav class="header-nav">
                 <ul class="header-nav__list">
-                    <li>
-                        <form action="/logout" method="post">
-                            @csrf
-                            <input class="logout__link" type="submit" value="ログアウト">
-                        </form>
-                    </li>
+                    @guest {{-- もし、ログインしていなかったら（ゲストなら）--}}
+                        <li><a href="/login" class="login__link">ログイン</a></li>
+                    @endguest
+                    @auth {{-- もし、ログインしていたら --}}
+                        <li>
+                            <form action="/logout" method="post">
+                                @csrf
+                                <input class="logout__link" type="submit" value="ログアウト">
+                            </form>
+                        </li>
+                    @endauth
                     <li><a href="/mypage" class="mypage__link">マイページ</a></li>
                     <li><a href="/sell" class="sell__btn">出品</a></li>
                 </ul>

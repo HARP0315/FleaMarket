@@ -6,6 +6,13 @@
 
 @section('content')
 <div class="mypage-list">
+    {{-- もし、'success'という名前のセッションメッセージがあれば --}}
+    @if (session('success'))
+        <div class="mypage-list__success-message--flash">
+            {{ session('success') }}
+        </div>
+    @endif
+    {{-- ▲▲▲ ここまで ▲▲▲ --}}
     <div class="mypage-list__heading">
         <div class="mypage-list__user-img-display"
          @if($user->img)

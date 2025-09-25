@@ -7,6 +7,10 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
 
 class AuthenticationTest extends TestCase
 {
@@ -236,4 +240,66 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect('/');
     }
 
+    // ★メール認証機能
+
+    /**
+     * @test
+     * ユーザーは会員登録後にメール認証を完了できる (テスト38, 39, 40)
+     */
+    public function a_user_can_register_and_verify_their_email(): void
+    {
+        // --- 準備 (Arrange) ---
+        // 1. ★★★ Laravelに「これからメールのテストをします」と宣言する ★★★
+        Notification::fake();
+        Event::fake();
+
+        // 2. 会員登録用のテストデータを用意
+        $userData = [
+            'name'                  => '認証テストユーザー',
+            'email'                 => 'verify@example.com',
+            'password'              => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+
+        // ★★★ 1.「会員登録とメール送信」のテスト (テスト38) ★★★
+
+        // --- 実行 (Act) ---
+        // 会員登録を実行
+        $this->post('/register', $userData);
+
+        // --- 検証 (Assert) ---
+        // 1. データベースにユーザーが作成されたことを確認
+        $this->assertDatabaseHas('users', ['email' => 'verify@example.com']);
+
+        // 2. 作成されたユーザーを取得
+        $user = User::where('email', 'verify@example.com')->first();
+
+        // 3. ★★★ そのユーザー宛に、認証メールが「送信された」ことを確認 ★★★
+        Notification::assertSentTo($user, \Illuminate\Auth\Notifications\VerifyEmail::class);
+
+
+        // ★★★ 2.「メール認証の完了」のテスト (テスト39, 40) ★★★
+
+        // --- 実行 (Act) ---
+        // 1. Laravelが生成するはずの「認証用URL」を、テストの中で自分で作成する
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify', // ルート名
+            now()->addMinutes(60), // 有効期限
+            ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())] // 必要なパラメータ
+        );
+
+        // 2. 作成したURLに、ログインした状態でアクセスする（＝メールのリンクをクリックしたことを再現）
+        $response = $this->actingAs($user)->get($verificationUrl);
+
+        // --- 検証 (Assert) ---
+        // 1. ★★★ ユーザーが「認証済み」になったことを確認 ★★★
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+
+        // 2. ★★★ 認証完了のイベントが発生したことを確認 ★★★
+        Event::assertDispatched(Verified::class);
+
+        // 3. 正しくホームページ('/')にリダイレクトされたことを確認
+        $response->assertRedirect('/?verified=1');
+    }
 }

@@ -7,13 +7,6 @@
 @section('content')
 <div class="profile-form">
     <h2 class="profile-form__ttl">プロフィール設定</h2>
-        {{-- もし、'success'という名前のセッションメッセージがあれば --}}
-    @if (session('success'))
-        <div class="profile-form__success-message--flash">
-            {{ session('success') }}
-        </div>
-    @endif
-    {{-- ▲▲▲ ここまで ▲▲▲ --}}
     <form action="/mypage/profile" method="post" enctype="multipart/form-data" class="profile-form__inner">
         @csrf
         @method('PATCH')

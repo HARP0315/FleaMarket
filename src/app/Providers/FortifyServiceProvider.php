@@ -76,5 +76,8 @@ class FortifyServiceProvider extends ServiceProvider
             return new CreateNewUser($app->make(RegisterRequest::class));
         });
 
+        Fortify::verifyEmailView(function () {
+        return view('auth.verify_email'); // メール認証誘導画面
+        });
     }
 }

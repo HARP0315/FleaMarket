@@ -57,6 +57,11 @@
                 @else
                     <div class="item-page__purchase-btn btn--disabled">売り切れました</div>
                 @endif
+                @if (session('error'))
+                    <div class="item-page__error-message--flash">
+                        {{ session('error') }}
+                    </div>
+                @endif
             </div>
 
             <div class="item-page__description">

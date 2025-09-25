@@ -38,6 +38,10 @@ class UserController extends Controller
     public function update(ProfileRequest $request){
 
         $user = Auth::user();
+
+        // ▼▼▼ ステップ1：更新「前」の状態で、初回更新かどうかを判断して、変数に記憶しておく ▼▼▼
+        $isFirstProfileUpdate = empty($user->post_code);
+
         $form = $request->validated();
 
         // 2. もし画像ファイルが送信されてきたら、保存処理を行う
@@ -51,7 +55,14 @@ class UserController extends Controller
         // 3. ログインしているユーザー自身の情報を更新する
         $user->update($form);
 
-        return redirect('/mypage/profile')->with('success', 'プロフィールを更新しました！');
+        // ▼▼▼ ステップ2：記憶しておいた結果を使って、リダイレクト先を切り替える ▼▼▼
+        if ($isFirstProfileUpdate) {
+            // もし、初回更新だったら、商品一覧ページにリダイレクト
+            return redirect('/');
+        } else {
+            // 2回目以降の更新だったら、元のプロフィール編集ページに戻る
+            return redirect('/mypage')->with('success', 'プロフィールを更新しました！');
+        }
 
     }
 }

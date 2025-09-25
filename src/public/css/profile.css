@@ -117,3 +117,11 @@
 .mypage-list__item-name {
     margin: 3px auto;
 }
+
+.mypage-list__success-message--flash{
+    display: inline-block;
+    margin: 10px 0 10px 20px;
+    color:#dc3545;
+    background:linear-gradient(transparent 75%,#ffdead 75%);
+    font-size: 20px;
+}

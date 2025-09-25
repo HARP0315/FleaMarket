@@ -56,6 +56,16 @@ class PurchaseController extends Controller
 
         $user = Auth::user();
         $item = Item::findOrFail($item_id);
+
+        // ▼▼▼ ここからが今回の追加部分（門番ロジック） ▼▼▼
+        // もし、商品の出品者IDと、ログインしているユーザーのIDが同じだったら
+        if ($item->user_id === $user->id) {
+            // 商品詳細ページに戻し、「自分が出品した商品は購入できません」というエラーメッセージを表示する
+            return redirect('/item/' . $item->id)
+                ->with('error', 'ご自身が出品した商品は購入できません');
+        }
+        // ▲▲▲ ここまで ▲▲▲
+
         $form = $request->validated();
 
         // フォームから送られてきた住所データを取得

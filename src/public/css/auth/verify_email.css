@@ -1,0 +1,56 @@
+.verify-email {
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 100px;
+}
+
+.verify-email__inner {
+    background-color: #ffffff;
+    padding: 50px;
+    text-align: center;
+}
+
+/* --- テキストメッセージのスタイル --- */
+.verify-email__inner-message {
+    margin: 0 0 30px 0;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* 再送成功メッセージのスタイル */
+.verify-email__success-message {
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* --- ボタンとリンクのエリア --- */
+.verify-email__inner-actions {
+    margin-top: 60px;
+}
+
+.verify-email__inner-verify-button{
+    display: inline-block;
+    padding: 12px 26px;
+    border: 1px solid #000;
+    background-color: #D9D9D9;
+    border-radius: 8px;
+    color: #000;
+    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+/* 「認証メールを再送する」ボタンのスタイル */
+.verify-email__inner-resend-link {
+    display: inline-block;
+    margin-top:60px;
+    border: none;
+    background-color:transparent;
+    color: #4c97d9;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+}

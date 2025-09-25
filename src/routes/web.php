@@ -25,7 +25,7 @@ Route::get('/item/{item_id}',[ItemController::class,'show']);
 Route::post('/item/{item}/comments',[CommentController::class,'store']);
 
 // ■ ログインが必要なページ
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage',[UserController::class,'index']);
     Route::get('/mypage/profile',[UserController::class,'edit']);
     Route::patch('/mypage/profile',[UserController::class,'update']);

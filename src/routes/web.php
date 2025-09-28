@@ -24,6 +24,13 @@ Route::get('/', [ItemController::class, 'index']);
 Route::get('/item/{item_id}',[ItemController::class,'show']);
 Route::post('/item/{item}/comments',[CommentController::class,'store']);
 
+// 決済成功時のルート
+    Route::get('/purchase/success', [PurchaseController::class, 'success'])
+        ->name('purchase.success');
+// 決済キャンセル時のルート
+    Route::get('/purchase/{item_id}/cancel', [PurchaseController::class, 'cancel'])
+        ->name('purchase.cancel');
+
 // ■ ログインが必要なページ
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage',[UserController::class,'index']);
@@ -37,4 +44,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/purchase/{item_id}',[PurchaseController::class,'store']);
     Route::get('/purchase/address/{item_id}',[PurchaseController::class,'edit']);
     Route::post('/purchase/address/{item_id}',[PurchaseController::class,'update']);
+
 });

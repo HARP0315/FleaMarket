@@ -10,11 +10,13 @@ use App\Models\Purchase;
 use App\Models\Address;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class PurchaseController extends Controller
 {
 
-        private function getCurrentAddress(Request $request)
+    private function getCurrentAddress(Request $request)
     {
         $user = Auth::user();
 
@@ -79,18 +81,41 @@ class PurchaseController extends Controller
         // ★★★ このタイミングで、firstOrCreateを使って住所を保存 ★★★
         $address = Address::firstOrCreate($shippingAddress);
 
-        // 購入情報を保存
-        $user->purchases()->create([
-            'item_id' => $item->id,
-            'address_id' => $address->id,
-            'price' => $item->price,
-            'payment_method' => $form['payment_method'],
+        // 購入情報はまだ DB には入れず、Stripe Checkout に送る
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        // 3. Stripe Checkoutセッションを作成
+        $session = Session::create([
+            // 支払い方法：カードとコンビニ決済の両方を許可
+            'payment_method_types' => ['card', 'konbini'],
+
+            // 購入する商品情報
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'jpy', // 通貨
+                    'product_data' => [
+                        'name' => $item->name, // 商品名
+                    ],
+                    'unit_amount' => $item->price, // 価格
+                ],
+                'quantity' => 1,
+            ]],
+
+            'mode' => 'payment', // 支払いモード
+
+            // 決済成功時とキャンセル時のリダイレクト先URL
+            'success_url' => route('purchase.success'),
+            'cancel_url' => route('purchase.cancel', ['item_id' => $item->id]),
         ]);
 
-        // ★★★ 使った一時的な住所をセッションから削除 ★★★
-        $request->session()->forget('temporary_address');
+        // ★★★ 決済成功時に、どの商品が購入されたかを思い出すために、
+        //     item_idとaddress_idをセッションに一時的に保存 ★★★
+        $request->session()->put('purchase_item_id', $item->id);
+        $request->session()->put('purchase_address_id', $address->id);
+        $request->session()->put('payment_method', $form['payment_method']);
 
-        return redirect('/');
+        // 4. 作成されたStripeの決済ページURLにリダイレクト
+        return redirect($session->url, 303);
 
     }
 
@@ -111,4 +136,54 @@ class PurchaseController extends Controller
         return redirect('/purchase/' . $item_id);
     }
 
+    /**
+     * 決済成功時の処理
+     */
+    public function success(Request $request)
+    {
+        // 1. セッションから、購入された商品IDと住所IDを取得
+        $itemId = $request->session()->get('purchase_item_id');
+        $addressId = $request->session()->get('purchase_address_id');
+        $paymentMethod = $request->session()->get('payment_method');
+
+        // 2. 必要なモデルを取得
+        if (!$itemId || !$addressId || !$paymentMethod) {
+        // セッションが切れているか、直接アクセスされた場合
+        return redirect('/')
+            ->with('error', '購入情報が見つかりません。もう一度お試しください。');
+    }
+
+        $item = Item::find($itemId);
+        if (!$item) {
+            return redirect('/')
+                ->with('error', '購入対象の商品が見つかりません。');
+        }
+        $user = Auth::user();
+
+        // 3. ★★★ このタイミングで、purchasesテーブルに購入情報を「本当に」保存する ★★★
+        Purchase::create([
+            'user_id' => $user->id,
+            'item_id' => $itemId,
+            'address_id' => $addressId,
+            'price' => $item->price,
+            'payment_method' => $paymentMethod,
+        ]);
+
+        // 4. 使い終わったセッション情報を削除
+        $request->session()->forget(['purchase_item_id', 'purchase_address_id', 'purchase_payment_method']);
+
+        // 5. 購入完了ページを表示
+        return redirect('/')->with('success', '購入が完了しました！');
+    }
+
+    /**
+     * 決済キャンセル時の処理
+     */
+    public function cancel(Request $request,$item_id)
+    {
+        // 商品詳細ページに戻し、「支払いがキャンセルされました」というメッセージを表示
+        $request->session()->forget(['purchase_item_id', 'purchase_address_id', 'purchase_payment_method']);
+        return redirect('/item/' . $item_id)->with('error', '支払いがキャンセルされました。');
+    }
 }
+

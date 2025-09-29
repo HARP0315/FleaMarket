@@ -72,10 +72,9 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 45px;
-    width: 95%;
+    width: 92%;
     margin: 0 auto;
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding: 60px 0;
 }
 
 .mypage-list__item-link {

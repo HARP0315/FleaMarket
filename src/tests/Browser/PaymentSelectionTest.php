@@ -6,13 +6,13 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\Models\User;
 use App\Models\Item;
-use Illuminate\Support\Carbon;
 
 class PaymentSelectionTest extends DuskTestCase
 {
 
     /**
      * @test
+     * 小計画面で変更が反映される
      */
     public function payment_method_selection_updates_summary_in_real_time(): void
     {

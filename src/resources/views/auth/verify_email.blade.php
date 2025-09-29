@@ -33,9 +33,7 @@
 
             <div class="verify-email__inner-actions">
                 <div class="verify-email__inner-link-wrapper">
-                    <a href="http://localhost:8025" target="_blank" class="verify-email__inner-verify-button">
-                        認証はこちらから
-                    </a>
+                    <a href="http://localhost:8025" target="_blank" class="verify-email__inner-verify-button">認証はこちらから</a>
                 </div>
                 {{-- ▲▲▲ ここまで ▲▲▲ --}}
 

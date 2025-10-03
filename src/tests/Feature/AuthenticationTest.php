@@ -25,8 +25,7 @@ class AuthenticationTest extends TestCase
     public function it_validates_registration_input(): void
     {
 
-        // --- 準備 ---
-        // テストで送信するための、名前(name)だけが空のデータを用意する
+        //準備
         $testData = [
             'name'                  => '',
             'email'                 => '',
@@ -34,12 +33,10 @@ class AuthenticationTest extends TestCase
             'password_confirmation' => 'password123',
         ];
 
-        // --- 実行  ---
-        // 会員登録ページ('/register')に、用意したデータをPOSTリクエストで送信する
+        //実行
         $response = $this->post('/register', $testData);
 
-        // --- 検証 ---
-        // バリデーションエラーがあり、かつ指定のメッセージが返ってくることを確認
+        //検証
         $response->assertInvalid([
         'name' => 'お名前を入力してください',
         'email' => 'メールアドレスを入力してください',
@@ -54,7 +51,7 @@ class AuthenticationTest extends TestCase
      */
     public function registration_fails_if_password_is_too_short(): void
     {
-        // --- 準備 ---
+        //準備
         $testData = [
             'name' => 'テストユーザー',
             'email' => 'test@example.com',
@@ -62,10 +59,10 @@ class AuthenticationTest extends TestCase
             'password_confirmation' => '1234567',
         ];
 
-        // --- 実行 ---
+        //実行
         $response = $this->post('/register', $testData);
 
-        // --- 検証 ---
+        //検証
         $response->assertInvalid([
             'password' => 'パスワードは8文字以上で入力してください',
         ]);
@@ -77,7 +74,7 @@ class AuthenticationTest extends TestCase
      */
     public function registration_fails_if_passwords_do_not_match(): void
     {
-        // --- 準備 ---
+        //準備
         $testData = [
             'name' => 'テストユーザー',
             'email' => 'test@example.com',
@@ -85,10 +82,10 @@ class AuthenticationTest extends TestCase
             'password_confirmation' => 'different_password',
         ];
 
-        // --- 実行 ---
+        //実行
         $response = $this->post('/register', $testData);
 
-        // --- 検証 ---
+        //検証
         $response->assertInvalid([
             'password_confirmation' => 'パスワードと一致しません',
         ]);
@@ -100,7 +97,7 @@ class AuthenticationTest extends TestCase
      */
     public function user_can_register_successfully(): void
     {
-        // --- 準備 ---
+        //準備
         $testData = [
             'name' => 'テスト太郎',
             'email' => 'success@example.com',
@@ -108,22 +105,22 @@ class AuthenticationTest extends TestCase
             'password_confirmation' => 'password123',
         ];
 
-        // --- 実行 ---
+        //実行
         $response = $this->post('/register', $testData);
 
-        // --- 検証 ---
-        // 1. バリデーションエラーが「ない」ことを確認
+        //検証
+        //バリデーションエラーが「ない」ことを確認
         $response->assertValid();
 
-        // 2. データベースに、このユーザーが作成されたことを確認
+        //データベースに、このユーザーが作成されたことを確認
         $this->assertDatabaseHas('users', [
             'email' => 'success@example.com',
         ]);
 
-        // 3. ユーザーが「ログイン済み」状態になっていることを確認
+        //ユーザーが「ログイン済み」状態になっていることを確認
         $this->assertAuthenticated();
 
-        // 4. 正しくプロフィール設定ページにリダイレクトされたことを確認
+        //プロフィール設定ページにリダイレクトされたことを確認
         $response->assertRedirect('/mypage/profile');
     }
 
@@ -135,13 +132,13 @@ class AuthenticationTest extends TestCase
      */
     public function login_fails_with_missing_credentials(): void
     {
-        // --- 実行 ---
+        //実行
         $response = $this->post('/login', [
             'email' => '',
             'password' => '',
         ]);
 
-        // --- 検証 ---
+        //検証
         $response->assertInvalid([
             'email' => 'メールアドレスを入力してください',
             'password' => 'パスワードを入力してください',
@@ -154,20 +151,19 @@ class AuthenticationTest extends TestCase
      */
     public function login_fails_with_incorrect_credentials(): void
     {
-        // --- 準備 ---
-        // テスト用のユーザーを1人作成しておく
+        //準備
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('correct-password'),
         ]);
 
-        // --- 実行 ---
+        //実行
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'wrong-password',
         ]);
 
-        // --- 検証 ---
+        //検証
         $response->assertInvalid([
             'email' => 'ログイン情報が登録されていません',
         ]);
@@ -182,20 +178,19 @@ class AuthenticationTest extends TestCase
      */
     public function user_can_login_successfully(): void
     {
-        // --- 準備 ---
+        //準備
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('correct-password'),
         ]);
 
-        // --- 実行 ---
+        //実行
         $response = $this->post('/login', [
             'email' => 'test@example.com',
             'password' => 'correct-password',
         ]);
 
-        // --- 検証 ---
-        // ログイン「できている」ことを確認
+        //検証
         $this->assertAuthenticated();
         $response->assertRedirect('/');
     }
@@ -206,18 +201,15 @@ class AuthenticationTest extends TestCase
      */
     public function authenticated_user_can_logout(): void
     {
-        // --- 準備 ---
-        // テスト用のユーザーを1人作成する
+        //準備
         $user = User::factory()->create();
-
-        // このユーザーとして「ログインした状態」を再現する
+        //ログイン状態にする
         $this->actingAs($user);
 
-        // --- 実行 ---
+        //実行
         $response = $this->post('/logout');
 
-        // --- 検証 ---
-        // 1. ユーザーが「ログアウト済み（ゲスト）」状態になっていることを確認する
+        //検証
         $this->assertGuest();
         $response->assertRedirect('/');
     }
@@ -230,12 +222,11 @@ class AuthenticationTest extends TestCase
      */
     public function a_user_can_register_and_verify_their_email(): void
     {
-        // --- 準備 (Arrange) ---
-        // 1. NotificationファサードとEventファサードをモック化
+        //準備
+        //NotificationファサードとEventファサードをモック化
         Notification::fake();
         Event::fake();
 
-        // 2. 会員登録用のテストデータを用意
         $userData = [
             'name'                  => '認証テストユーザー',
             'email'                 => 'verify@example.com',
@@ -245,41 +236,38 @@ class AuthenticationTest extends TestCase
 
         // 1.「会員登録とメール送信」のテスト
 
-        // --- 実行 ---
-        // 会員登録を実行
+        //実行
         $this->post('/register', $userData);
 
-        // --- 検証 ---
-        // 1. データベースにユーザーが作成されたことを確認
+        //検証
         $this->assertDatabaseHas('users', ['email' => 'verify@example.com']);
 
-        // 2. 作成されたユーザーを取得
         $user = User::where('email', 'verify@example.com')->first();
 
-        // 3.ユーザー宛に、認証メールが「送信された」ことを確認
+        //ユーザー宛に、認証メールが「送信された」ことを確認
         Notification::assertSentTo($user, \Illuminate\Auth\Notifications\VerifyEmail::class);
 
         // 2.遷移テスト：メール認証サイトのメール認証を完了すると、商品一覧ページに遷移する
 
-        // --- 実行 ---
-        // 1. Laravelが生成するはずの「認証用URL」を作成
+        //準備
+        //Laravelが生成する「認証用URL」を作成
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify', // ルート名
             now()->addMinutes(60), // 有効期限
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
 
-        // 2. 作成したURLに、ログインした状態でアクセスする
+        //実行
         $response = $this->actingAs($user)->get($verificationUrl);
 
-        // --- 検証 ---
-        // 1.ユーザーが「認証済み」になったことを確認 ★★★
+        //検証
+        //ユーザーが「認証済み」になったことを確認
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
 
-        // 2. 認証完了のイベントが発生したことを確認
+        //認証完了のイベントが発生したことを確認
         Event::assertDispatched(Verified::class);
 
-        // 3. 正しくホームページ('/')にリダイレクトされたことを確認
+        //トップページにリダイレクトされたことを確認
         $response->assertRedirect('/?verified=1');
     }
 }

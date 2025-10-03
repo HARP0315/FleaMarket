@@ -25,7 +25,7 @@ class PurchaseControllerTest extends TestCase
      */
     public function a_user_can_purchase_an_item_and_it_is_reflected_correctly(): void
     {
-        // --- 準備 (Arrange) ---
+        //準備
         $seller = User::factory()->create();
         $buyer = User::factory()->create();
         $item = Item::factory()->create([
@@ -105,7 +105,7 @@ class PurchaseControllerTest extends TestCase
      */
     public function a_user_can_change_shipping_address_and_purchase_with_it(): void
     {
-        // --- 準備 (Arrange) ---
+        //準備
         $seller = User::factory()->create();
         $buyer = User::factory()->create();
         $item = Item::factory()->create(['user_id' => $seller->id]);
@@ -115,41 +115,35 @@ class PurchaseControllerTest extends TestCase
             'building' => '新しいテストビル',
         ];
 
-        // ★★★ 1.「住所変更」のテスト（ここは変更なし） ★★★
+        //実行＆検証（商品購入画面への反映）
         $updateResponse = $this->actingAs($buyer)
             ->post('/purchase/address/' . $item->id, $newAddressData);
         $updateResponse->assertRedirect('/purchase/' . $item->id);
         $updateResponse->assertSessionHas('temporary_address', $newAddressData);
 
 
-        // ★★★ 2.「変更した住所で購入」のテスト ★★★
+        //「変更した住所で購入」のテスト
 
-        // ▼▼▼ ここからが今回の修正部分 ▼▼▼
-        // --- Stripeの動きを偽装（モック化） ---
+        //準備
         $mockSession = Mockery::mock('overload:' . Session::class);
         $mockSession->shouldReceive('create')
             ->once()
-            ->andReturn((object)['url' => '/purchase/success']); // 成功したら/purchase/successにリダイレクトされたことにする
+            ->andReturn((object)['url' => '/purchase/success']);
         Stripe::setApiKey('sk_test_dummy');
 
-        // --- 実行 (Act) ---
-        // 住所変更後の「一時的な住所」をセッションに持った状態で、購入処理のURLにPOSTリクエストを送信
+        //実行
         $purchaseResponse = $this->actingAs($buyer)
             ->withSession(['temporary_address' => $newAddressData])
             ->post('/purchase/' . $item->id, [
                 'payment_method' => '1',
-                 // hiddenフィールドから送られるデータを再現
                 'post_code' => $newAddressData['post_code'],
                 'address' => $newAddressData['address'],
                 'building' => $newAddressData['building'],
             ]);
 
-        // --- 検証 (Assert) ---
-        // 1. Stripe Checkout（今回はモックの/purchase/success）へのリダイレクトを確認
+        //検証
         $purchaseResponse->assertRedirect('/purchase/success');
 
-        // 2. ★★★ 決済成功後の処理をシミュレート（成功しているテストから真似する） ★★★
-        // storeメソッドがセッションに保存するはずの情報を、ここで擬似的に持たせる
         $createdAddress = Address::where('post_code', '987-6543')->first();
         $successResponse = $this->actingAs($buyer)
                                 ->withSession([
@@ -159,11 +153,8 @@ class PurchaseControllerTest extends TestCase
                                 ])
                                 ->get('/purchase/success');
 
-        // 3. 最終的にトップページにリダイレクトされること
         $successResponse->assertRedirect('/');
-        // ▲▲▲ ここまで ▲▲▲
 
-        // 4. addressesテーブルとpurchasesテーブルに、正しいデータが保存されたか
         $this->assertDatabaseHas('addresses', $newAddressData);
         $this->assertDatabaseHas('purchases', [
             'user_id' => $buyer->id,

@@ -7,6 +7,9 @@ use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
+/**
+ * DuskTestcase
+ */
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;

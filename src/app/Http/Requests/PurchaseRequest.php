@@ -26,7 +26,9 @@ class PurchaseRequest extends FormRequest
             'price' => 'nullable|integer',
             'post_code' => 'required',
             'address' => 'required',
-            'building' => 'nullable'
+            'building' => 'nullable',
+            'payment_status' => 'nullable',
+            'is_deleted' => 'nullable'
             ];
     }
 

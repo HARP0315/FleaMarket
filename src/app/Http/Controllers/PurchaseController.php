@@ -81,38 +81,35 @@ class PurchaseController extends Controller
         // ★★★ このタイミングで、firstOrCreateを使って住所を保存 ★★★
         $address = Address::firstOrCreate($shippingAddress);
 
+        $request->session()->put('purchase_address_id', $address->id);
+        $request->session()->put('payment_method', $form['payment_method']);
+
         // 購入情報はまだ DB には入れず、Stripe Checkout に送る
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        // 3. Stripe Checkoutセッションを作成
+        // Stripe Checkout 作成
+        Stripe::setApiKey(env('STRIPE_SECRET'));
         $session = Session::create([
-            // 支払い方法：カードとコンビニ決済の両方を許可
-            'payment_method_types' => ['card', 'konbini'],
-
-            // 購入する商品情報
+            'payment_method_types' => [$form['payment_method'] == 1 ? 'konbini' : 'card'],
             'line_items' => [[
                 'price_data' => [
-                    'currency' => 'jpy', // 通貨
-                    'product_data' => [
-                        'name' => $item->name, // 商品名
-                    ],
-                    'unit_amount' => $item->price, // 価格
+                    'currency' => 'jpy',
+                    'product_data' => ['name' => $item->name],
+                    'unit_amount' => $item->price,
                 ],
                 'quantity' => 1,
             ]],
-
-            'mode' => 'payment', // 支払いモード
-
-            // 決済成功時とキャンセル時のリダイレクト先URL
+            'mode' => 'payment',
             'success_url' => route('purchase.success'),
             'cancel_url' => route('purchase.cancel', ['item_id' => $item->id]),
-        ]);
 
-        // ★★★ 決済成功時に、どの商品が購入されたかを思い出すために、
-        //     item_idとaddress_idをセッションに一時的に保存 ★★★
-        $request->session()->put('purchase_item_id', $item->id);
-        $request->session()->put('purchase_address_id', $address->id);
-        $request->session()->put('payment_method', $form['payment_method']);
+            'metadata' => [
+                'item_id'        => $item->id,
+                'user_id'        => $user->id,
+                'address_id'     => $address->id,
+                'payment_method' => $form['payment_method'],
+            ],
+        ]);
 
         // 4. 作成されたStripeの決済ページURLにリダイレクト
         return redirect($session->url, 303);
@@ -159,15 +156,6 @@ class PurchaseController extends Controller
                 ->with('error', '購入対象の商品が見つかりません。');
         }
         $user = Auth::user();
-
-        // 3. ★★★ このタイミングで、purchasesテーブルに購入情報を「本当に」保存する ★★★
-        Purchase::create([
-            'user_id' => $user->id,
-            'item_id' => $itemId,
-            'address_id' => $addressId,
-            'price' => $item->price,
-            'payment_method' => $paymentMethod,
-        ]);
 
         // 4. 使い終わったセッション情報を削除
         $request->session()->forget(['purchase_item_id', 'purchase_address_id', 'purchase_payment_method']);

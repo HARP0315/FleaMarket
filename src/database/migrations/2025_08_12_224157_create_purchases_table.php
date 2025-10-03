@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained()->cascadeOnDelete()->unique();
             $table->foreignId('address_id')->constrained()->cascadeOnDelete();
             $table->integer('price');
-            $table->tinyInteger('payment_method');
+            $table->tinyInteger('payment_method'); // 0=有効, 1=削除済
+            $table->tinyInteger('payment_status')->default(0); // 0=未入金, 1=入金済
+            $table->tinyInteger('is_deleted')->default(0); // 0=有効, 1=削除済
             $table->timestamps();
         });
     }

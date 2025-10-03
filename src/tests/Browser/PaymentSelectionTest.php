@@ -17,16 +17,16 @@ class PaymentSelectionTest extends DuskTestCase
     public function payment_method_selection_updates_summary_in_real_time(): void
     {
 
+        //準備
         $this->browse(function (Browser $browser) {
-        // ユーザー作成
         $user = User::factory()->create([
             'email_verified_at' => now(),
             'password' => bcrypt('password'),
         ]);
 
-        // 商品作成
         $item = Item::factory()->create();
 
+        //実行
         $browser->visit('/login')
                 ->type('email', $user->email)
                 ->type('password', 'password')

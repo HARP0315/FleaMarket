@@ -76,16 +76,16 @@
                 <h3 class="item-page__sub-ttl">商品の情報</h3>
                 <dl class="item-page__details-list">
                     <div class="item-page__details-item">
-                        <dt class="item-page__details-item-term">カテゴリー</dt>
-                        <dd class="item-page__details-item-data">
+                        <dt>カテゴリー</dt>
+                        <dd>
                             @foreach($item->categories as $category)
                                 <span class="item-page__category-tag">{{ $category->content }}</span>
                             @endforeach
                         </dd>
                     </div>
                     <div class="item-page__details-item">
-                        <dt class="item-page__details-item-term">商品の状態</dt>
-                        <dd class="item-page__details-item-data">{{ $item->condition_content }}</dd>
+                        <dt>商品の状態</dt>
+                        <dd>{{ $item->condition_content }}</dd>
                     </div>
                 </dl>
             </div>

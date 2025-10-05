@@ -14,8 +14,7 @@ class LoginResponse implements LoginResponseContract
      */
     public function toResponse($request)
     {
-        // ログイン時は、プロフィールが設定済みかどうかに関わらず、
-        // 常にホームページへリダイレクトする
+        
         return redirect('/');
     }
 }

@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
-use App\Models\User;
-use App\Models\Item;
-use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * ユーザー関連の操作を扱うコントローラー
+ */
 class UserController extends Controller
 {
+    /**
+     * ユーザーのプロフィールページを表示
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request){
 
         $user = Auth::user();
-
         $tab = $request->query('page','sell');
 
         if($tab==='sell'){
@@ -27,42 +31,43 @@ class UserController extends Controller
         return view('profile',compact('user','items'));
     }
 
+    /**
+     * ユーザーのプロフィール編集ページを表示
+     * @return \Illuminate\View\View
+     */
     public function edit(){
 
         $user = Auth::user();
 
         return view('edit_profile',compact('user'));
-
     }
 
+    /**
+     * ユーザーのプロフィール情報を更新
+     * @param ProfileRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(ProfileRequest $request){
 
         $user = Auth::user();
-
-        // ▼▼▼ ステップ1：更新「前」の状態で、初回更新かどうかを判断して、変数に記憶しておく ▼▼▼
+        //初回更新かどうかを判断し、記憶しておく
         $isFirstProfileUpdate = empty($user->post_code);
 
         $form = $request->validated();
 
-        // 2. もし画像ファイルが送信されてきたら、保存処理を行う
         if ($request->hasFile('img')) {
-        // 'storage/app/public/profiles'フォルダに画像を保存し、そのパスを取得
-        $path = $request->file('img')->store('profiles', 'public');
-        // フォームのデータに、画像のパスを上書きする
-        $form['img'] = $path;
-    }
-
-        // 3. ログインしているユーザー自身の情報を更新する
-        $user->update($form);
-
-        // ▼▼▼ ステップ2：記憶しておいた結果を使って、リダイレクト先を切り替える ▼▼▼
-        if ($isFirstProfileUpdate) {
-            // もし、初回更新だったら、商品一覧ページにリダイレクト
-            return redirect('/');
-        } else {
-            // 2回目以降の更新だったら、元のプロフィール編集ページに戻る
-            return redirect('/mypage')->with('success', 'プロフィールを更新しました！');
+            // 'storage/app/public/profiles'フォルダに画像を保存し、そのパスを取得
+            $path = $request->file('img')->store('profiles', 'public');
+            $form['img'] = $path;
         }
 
+        $user->update($form);
+
+        //リダイレクト先の切り替え
+        if ($isFirstProfileUpdate) {
+            return redirect('/');
+        } else {
+            return redirect('/mypage')->with('success', 'プロフィールを更新しました！');
+        }
     }
 }

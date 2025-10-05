@@ -1,14 +1,16 @@
-
 /* レスポンシブ対応 */
+
 @media screen and (max-width: 1540px) {
     html,
     body {
+        width: 100%;
         height: 100%;
         margin: 0;
     }
 }
 
 /* 画面全体 */
+
 .app {
     display: flex;
     flex-direction: column;
@@ -17,6 +19,7 @@
 }
 
 /* ヘッダー */
+
 .header {
     display: grid;
     grid-template-columns: repeat(3,1fr);
@@ -27,6 +30,7 @@
 }
 
 /* ロゴ */
+
 .header-logo {
     grid-column: 1;
     margin: 15px 60px 15px 40px;
@@ -38,6 +42,7 @@
 }
 
 /* サーチフォーム */
+
 .search-form{
     grid-column: 2;
     margin: 20px 10px;
@@ -53,6 +58,7 @@
 }
 
 /* ナビ */
+
 .header-nav {
     grid-column: 3;
     display: flex;
@@ -81,8 +87,8 @@
 }
 
 .mypage__link {
-    text-decoration: none;
     color: #fff;
+    text-decoration: none;
     font-size: 18px;
 }
 

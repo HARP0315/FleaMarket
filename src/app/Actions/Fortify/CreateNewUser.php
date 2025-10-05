@@ -19,17 +19,12 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        // 1. まず、ユーザーを作成する
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
 
-        // ▼▼▼ 2. 作成したユーザーに対して、手動で認証メールを送信する ▼▼▼
-        $user->sendEmailVerificationNotification();
-
-        // 3. 作成したユーザーを返す
         return $user;
     }
 }

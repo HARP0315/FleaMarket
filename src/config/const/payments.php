@@ -1,5 +1,7 @@
 <?php
 
+//支払い方法
+
 return[
 
     'payments' => [

@@ -29,7 +29,8 @@ Route::get('/purchase/success', [PurchaseController::class, 'success'])
 Route::get('/purchase/{item_id}/cancel', [PurchaseController::class, 'cancel'])
     ->name('purchase.cancel');
 //Stripe Webhook
-Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
+ ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 //★ログイン必要
 Route::middleware(['auth', 'verified'])->group(function () {

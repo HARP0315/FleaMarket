@@ -64,18 +64,20 @@
                 @enderror
             </div>
             {{-- 商品の状態 --}}
-            <div class="exhibition-form__detail-area details-list">
+            <div class="exhibition-form__detail-area">
                 <label for="condition" class="exhibition-form__label">商品の状態</label>
-                <select name="condition" id="condition" class="exhibition-form__select">
-                    <option disabled selected>選択してください</option>
-                    @foreach(config('const.conditions.conditions') as $key => $value)
-                        <option value="{{ $key }}"
-                         @if(old('condition') == $key)
-                             selected
-                         @endif
-                        >{{$value}}</option>
-                    @endforeach
-                </select>
+                <div class="condition-list">
+                    <select name="condition" id="condition" class="exhibition-form__select">
+                        <option disabled selected>選択してください</option>
+                        @foreach(config('const.conditions.conditions') as $key => $value)
+                            <option value="{{ $key }}"
+                             @if(old('condition') == $key)
+                                 selected
+                             @endif
+                            >{{$value}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 @error('condition')
                     <p class="exhibition-form__error-message">{{ $message }}</p>
                 @enderror
@@ -93,10 +95,10 @@
                  class="exhibition-form__input"
                  value="{{ old('name') }}"
                 >
-                @error('name')
-                    <p class="exhibition-form__error-message">{{ $message }}</p>
-                @enderror
             </div>
+            @error('name')
+                <p class="exhibition-form__error-message">{{ $message }}</p>
+            @enderror
             {{-- ブランド名 --}}
             <div class="exhibition-form__detail-area">
                 <label for="brand" class="exhibition-form__label">ブランド名</label>
@@ -107,10 +109,10 @@
                  class="exhibition-form__input"
                  value="{{ old('brand') }}"
                 >
-                @error('brand')
-                    <p class="exhibition-form__error-message">{{ $message }}</p>
-                @enderror
             </div>
+            @error('brand')
+                <p class="exhibition-form__error-message">{{ $message }}</p>
+            @enderror
             {{-- 商品の説明 --}}
             <div class="exhibition-form__detail-area">
                 <label for="description" class="exhibition-form__label">商品の説明</label>
@@ -120,20 +122,19 @@
                  class="exhibition-form__textarea"
                  value="{{old('description')}}"
                 >{{ old('description') }}</textarea>
-                @error('description')
-                    <p class="exhibition-form__error-message">{{ $message }}</p>
-                @enderror
             </div>
+            @error('description')
+                <p class="exhibition-form__error-message">{{ $message }}</p>
+            @enderror
             {{-- 販売価格 --}}
-            <h3 class="exhibition-form__sub-ttl">販売価格</h3>
             <div class="exhibition-form__detail-area">
-                <div class="exhibition-form__price-box">
-                    <span>¥</span>
+                <label for="price" class="exhibition-form__label">販売価格</label>
+                <div class=exhibition-form__detail-price>
                     <input
                      type="text"
                      name="price"
                      id="price"
-                     class="exhibition-form__price-input"
+                     class="exhibition-form__input price-input"
                      value="{{ old('price') }}"
                     >
                 </div>

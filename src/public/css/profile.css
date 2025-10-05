@@ -1,6 +1,10 @@
+/* 画面全体 */
+
 .mypage-list {
     background-color: #fff;
 }
+
+/* 画面　ヘッダー */
 
 .mypage-list__heading {
     display: grid;
@@ -9,6 +13,8 @@
     align-items: center;
     margin: 50px 0;
 }
+
+/* ユーザー画像 */
 
 .mypage-list__user-img-display {
     grid-column: 1;
@@ -23,6 +29,7 @@
 }
 
 /* ユーザー名 */
+
 .mypage-list__user-name {
     grid-column: 2;
     font-size: 30px;
@@ -34,27 +41,29 @@
 }
 
 /* プロフィール編集ボタン */
+
 .mypage-list__profile-button {
     grid-column: 3;
     padding: 12px 35px;
-    border: 2px solid #ff5e5d;
+    border: 2px solid #ff5555;
     border-radius: 5px;
-    color: #ff5e5d;
     background-color: #fff;
+    color: #ff5555;
     font-size: 18px;
     font-weight: bold;
     text-decoration: none;
 }
 
-/* --- タブエリア --- */
+/* --- タブ切替え --- */
+
 .mypage-list__tab {
     display: flex;
     align-items: center;
     height: 45px;
     margin-top:30px;
     padding-left: 120px;
-    gap:40px;
     border-bottom: solid 1px #5f5f5f;
+    gap:40px;
 }
 
 .mypage-list__tab-link {
@@ -65,16 +74,18 @@
 }
 
 .mypage-list__tab-link--active {
-    color: #ff5e5d;
+    color: #ff5555;
 }
+
+/* 商品一覧 */
 
 .mypage-list__content {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 45px;
     width: 92%;
     margin: 0 auto;
     padding: 60px 0;
+    gap: 45px;
 }
 
 .mypage-list__item-link {
@@ -88,15 +99,17 @@
     overflow: hidden;
 }
 
+/* 売り切れ時 */
+
 .mypage-list__sold-box {
+    display: flex;
     position: absolute;
+    justify-content: center;
+    align-items: center;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: rgba(128, 128, 128, 0.8);
     color: white;
     font-size: 24px;
@@ -113,14 +126,18 @@
     visibility: visible;
 }
 
+/* 商品名 */
+
 .mypage-list__item-name {
     margin: 3px auto;
 }
 
+/* 　フラッシュメッセージ */
+
 .mypage-list__success-message--flash{
     display: inline-block;
     margin: 10px 0 10px 20px;
-    color:#dc3545;
     background:linear-gradient(transparent 75%,#ffdead 75%);
+    color:#dc3545;
     font-size: 20px;
 }

@@ -5,6 +5,12 @@
 
 @section('content')
 <div class="item-list">
+    {{-- フラッシュメッセージ（購入成功） --}}
+    @if (session('success'))
+        <div class="item-list__success-message--flash">
+            {{ session('success') }}
+        </div>
+    @endif
     {{-- タブの切替え --}}
     <div class="item-list__tab">
         <a

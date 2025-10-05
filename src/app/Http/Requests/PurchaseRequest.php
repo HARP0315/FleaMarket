@@ -23,7 +23,7 @@ class PurchaseRequest extends FormRequest
     {
         return [
             'payment_method' => 'required',
-            'price' => 'nullable|integer',
+            'price' => 'nullable',
             'post_code' => 'required',
             'address' => 'required',
             'building' => 'nullable',

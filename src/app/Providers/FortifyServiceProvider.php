@@ -77,7 +77,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::verifyEmailView(function () {
-        return view('auth.verify_email'); // メール認証誘導画面
+            return view('auth.verify_email'); // メール認証誘導画面
         });
     }
 }

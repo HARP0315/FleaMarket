@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete()->unique();
-            $table->foreignId('address_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('address_id')->nullable();
+            $table->foreign('address_id')->references('id')->on('addresses')->cascadeOnDelete();
             $table->integer('price');
-            $table->tinyInteger('payment_method'); // 0=有効, 1=削除済
+            $table->tinyInteger('payment_method'); // 1=コンビニ, 2=カード
             $table->tinyInteger('payment_status')->default(0); // 0=未入金, 1=入金済
             $table->tinyInteger('is_deleted')->default(0); // 0=有効, 1=削除済
             $table->timestamps();

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Like;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * いいね追加＆削除機能のコントローラー
+ */
 class LikeController extends Controller
 {
     public function store(Item $item)
@@ -23,5 +24,4 @@ class LikeController extends Controller
 
         return back();
     }
-
 }

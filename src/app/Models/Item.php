@@ -49,14 +49,14 @@ class Item extends Model
     {
     // もし$userがnullなら(未ログイン)、falseを返す
         if ($user === null) {
-        return false;
+            return false;
         }
-    // この商品のいいねリストの中に、引数で渡されたユーザーのIDが存在するかどうかをチェック
-    return $this->likes()->where('user_id', $user->id)->exists();
+    // この商品のいいねリストの中に、指定ユーザーIDが存在するかどうかチェック
+        return $this->likes()->where('user_id', $user->id)->exists();
     }
 
     /**
-     * conditionを、configファイルの値（文字列）に変換するためのアクセサ
+     * conditionを、configファイルの値に変換するためのアクセサ
      */
     protected function conditionContent(): Attribute
     {
@@ -75,12 +75,12 @@ class Item extends Model
                 // $attributes['img'] で、このモデルの'img'カラムの値を取得
                 $path = $attributes['img'];
 
-                // もしパスが'http'で始まっていたら、それは外部URLなのでそのまま返す
+                // もしパスが'http'で始まっていたら、外部URLなのでそのまま返す
                 if (Str::startsWith($path, 'http')) {
                     return $path;
                 }
 
-                // もしパスが'items/'や'profiles/'で始まっていたら、それはユーザーがアップロードしたファイル
+                // パスが'items/'や'profiles/'で始まっていたら、それはユーザーがアップロードしたファイル
                 if (Str::startsWith($path, 'items/') || Str::startsWith($path, 'profiles/')) {
                     return asset('storage/' . $path);
                 }

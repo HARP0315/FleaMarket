@@ -1,5 +1,7 @@
 <?php
 
+// 商品の状態
+
 return[
 
     'conditions' => [

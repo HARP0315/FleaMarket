@@ -193,8 +193,20 @@ class PurchaseController extends Controller
      */
     public function cancel($item_id)
     {
+        $user = Auth::user();
+
+        // 該当する仮購入レコードを削除
+        $purchase = Purchase::where('item_id', $item_id)
+            ->where('user_id', $user->id)
+            ->where('payment_status', 0) // 未決済のみ削除
+            ->first();
+
+        if ($purchase) {
+            $purchase->delete();
+        }
+
         return redirect('/item/' . $item_id)
-         ->with('error', '支払いがキャンセルされました。');
+            ->with('error', '支払いがキャンセルされました。');
     }
 }
 

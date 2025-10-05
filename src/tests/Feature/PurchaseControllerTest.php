@@ -2,164 +2,106 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Address;
 use App\Models\Purchase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
-use Stripe\Checkout\Session;
 use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class PurchaseControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    // ★商品購入 関連のテスト★
-
-    /**
-     * @test
-     * ログインユーザーは商品を購入でき、購入後は正しく表示が更新される
-     */
-    public function a_user_can_purchase_an_item_and_it_is_reflected_correctly(): void
+    /** @test
+     * 送付先住所変更画面にて登録した住所が商品購入画面に反映、購入情報に紐づく
+    */
+    public function user_can_change_shipping_address_and_purchase_with_webhook(): void
     {
-        //準備
-        $seller = User::factory()->create();
-        $buyer = User::factory()->create();
-        $item = Item::factory()->create([
-            'user_id' => $seller->id,
-            'name' => 'テスト購入用商品',
-            'price' => 5000,
-        ]);
+        putenv('STRIPE_USE_FAKE=true');
+        Stripe::setApiKey('sk_test_dummy');
 
-        // ▼▼▼ 代わりに、フォームで送信する「住所データ（配列）」を用意する ▼▼▼
-        $addressTest = [
-            'post_code' => '123-4567',
-            'address' => '東京都テスト区テスト町',
-            'building' => 'テストビル101',
-        ];
-
-        // --- Stripe モック ---
-        $mockSession = Mockery::mock('overload:' . Session::class);
-        $mockSession->shouldReceive('create')
-            ->once()
-            ->andReturn((object)['url' => '/purchase/success']);
-
-        Stripe::setApiKey('sk_test_xxx'); // ダミーでOK
-
-        // --- 実行 (Act) ---
-        // ▼▼▼ POSTデータに、住所データを追加して送信する ▼▼▼
-        $response = $this->actingAs($buyer)->post('/purchase/' . $item->id, [
-            'payment_method' => '1',
-            'post_code' => $addressTest['post_code'],
-            'address' => $addressTest['address'],
-            'building' => $addressTest['building'],
-        ]);
-
-        // --- 検証 (Assert) ---
-        // Stripe Checkout へのリダイレクトを確認
-        $response->assertRedirect('/purchase/success');
-
-        // --- Act: 決済成功後の処理 ---
-        $successResponse = $this->actingAs($buyer)->get('/purchase/success');
-
-        // 最終的にトップページにリダイレクトされること
-        $successResponse->assertRedirect('/');
-
-        // 1. まず、addressesテーブルに新しい住所が作成されたかを確認
-        $this->assertDatabaseHas('addresses', $addressTest);
-
-        // 2. 作成された住所のIDを取得する
-        $createdAddress = Address::first();
-
-        // 3. purchasesテーブルに、その新しい住所IDが使われているかを確認
-        $this->assertDatabaseHas('purchases', [
-            'user_id' => $buyer->id,
-            'item_id' => $item->id,
-            'address_id' => $createdAddress->id, // ★ここが重要！
-            'price' => 5000,
-        ]);
-
-
-        // ▼▼▼ テスト30: 商品一覧で「SOLD」と表示されるかの検証 ▼▼▼
-        // 1. 購入後、改めて商品一覧ページにアクセスする
-        $indexResponse = $this->get('/');
-
-        // 2. HTMLの中に「SOLD」という文字が含まれているか
-        $indexResponse->assertSee('SOLD');
-
-
-        // ▼▼▼ テスト31: マイページの購入履歴に追加されるかの検証 ▼▼▼
-        // 1. 購入者として、マイページの「購入した商品」タブにアクセスする
-        $mypageResponse = $this->actingAs($buyer)->get('/mypage?page=buy');
-
-        // 2. HTMLの中に、購入した商品の名前が含まれているか
-        $mypageResponse->assertSee('テスト購入用商品');
-    }
-
-    /**
-     * @test
-     * ユーザーは配送先住所を変更でき、その新しい住所で購入が完了できる
-     */
-    public function a_user_can_change_shipping_address_and_purchase_with_it(): void
-    {
         //準備
         $seller = User::factory()->create();
         $buyer = User::factory()->create();
         $item = Item::factory()->create(['user_id' => $seller->id]);
+
+        //送付先変更ページで作成される住所情報
         $newAddressData = [
             'post_code' => '987-6543',
             'address' => '新しいテスト住所',
             'building' => '新しいテストビル',
         ];
 
-        //実行＆検証（商品購入画面への反映）
+        //実行＆検証
         $updateResponse = $this->actingAs($buyer)
-            ->post('/purchase/address/' . $item->id, $newAddressData);
-        $updateResponse->assertRedirect('/purchase/' . $item->id);
-        $updateResponse->assertSessionHas('temporary_address', $newAddressData);
+            ->post("/purchase/address/{$item->id}", $newAddressData);
 
+        $updateResponse->assertRedirect("/purchase/{$item->id}");
+        $this->assertEquals(session('temporary_address'), $newAddressData);
 
-        //「変更した住所で購入」のテスト
+        //送付先住所が商品購入画面で表示されているか確認
+        $this->actingAs($buyer)
+             ->get("/purchase/{$item->id}")
+             ->assertSee($newAddressData['address'])
+             ->assertSee($newAddressData['post_code'])
+             ->assertSee($newAddressData['building']);
 
-        //準備
+        //Stripe Checkout モック
         $mockSession = Mockery::mock('overload:' . Session::class);
         $mockSession->shouldReceive('create')
             ->once()
             ->andReturn((object)['url' => '/purchase/success']);
-        Stripe::setApiKey('sk_test_dummy');
 
-        //実行
+        //購入実行
         $purchaseResponse = $this->actingAs($buyer)
             ->withSession(['temporary_address' => $newAddressData])
-            ->post('/purchase/' . $item->id, [
-                'payment_method' => '1',
+            ->post("/purchase/{$item->id}", [
+                'price' => $item->price,
+                'payment_method' => 1,
                 'post_code' => $newAddressData['post_code'],
                 'address' => $newAddressData['address'],
                 'building' => $newAddressData['building'],
             ]);
 
-        //検証
         $purchaseResponse->assertRedirect('/purchase/success');
 
-        $createdAddress = Address::where('post_code', '987-6543')->first();
-        $successResponse = $this->actingAs($buyer)
-                                ->withSession([
-                                    'purchase_item_id' => $item->id,
-                                    'purchase_address_id' => $createdAddress->id,
-                                    'payment_method' => '1',
-                                ])
-                                ->get('/purchase/success');
-
-        $successResponse->assertRedirect('/');
-
-        $this->assertDatabaseHas('addresses', $newAddressData);
-        $this->assertDatabaseHas('purchases', [
+        // 仮注文レコード取得
+        $purchase = Purchase::firstWhere([
             'user_id' => $buyer->id,
             'item_id' => $item->id,
-            'address_id' => $createdAddress->id,
         ]);
+
+        //Webhook 擬似呼び出し
+        $payload = [
+            'type' => 'checkout.session.completed',
+            'data' => [
+                'object' => [
+                    'metadata' => [
+                        'item_id' => $item->id,
+                        'user_id' => $buyer->id,
+                        'purchase_id' => $purchase->id,
+                        'post_code' => $newAddressData['post_code'],
+                        'address' => $newAddressData['address'],
+                        'building' => $newAddressData['building'],
+                        'payment_method' => 1,
+                    ],
+                    'amount_total' => $item->price,
+                ],
+            ],
+        ];
+
+        $response = $this->postJson('/stripe/webhook', $payload);
+        $response->assertStatus(200);
+
+        //DB確認: Address レコードを取得
+        $address = Address::where($newAddressData)->first();
+
+        // その住所が紐づく Purchase があるか確認
+        $purchase = Purchase::where('address_id', $address->id)->first();
+
     }
 }

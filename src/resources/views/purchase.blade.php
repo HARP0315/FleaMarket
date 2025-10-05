@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="purchase-page">
-    <form action="/purchase/{{ $item->id }}" method="post" target="_blank">
+     <form action="/purchase/{{ $item->id }}" method="post" target="_blank">
         @csrf
         {{-- 画面左：購入情報 --}}
         <div class="purchase-page__main">

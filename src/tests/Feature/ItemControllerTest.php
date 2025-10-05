@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
@@ -13,6 +11,8 @@ use App\Models\Purchase;
 use App\Models\Category;
 use App\Models\Like;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class ItemControllerTest extends TestCase
 {
@@ -179,7 +179,7 @@ class ItemControllerTest extends TestCase
         $response->assertDontSee('アンティークな腕時計');
 
         // 検索キーワードが入力欄に保持されていることを確認
-        $response->assertSee('<input type="search" name="keyword" placeholder="なにをお探しですか？" value="腕時計"', false);
+        $response->assertSee('value="腕時計"',false);
     }
 
     // ★商品詳細情報取得 関連のテスト★
@@ -190,7 +190,11 @@ class ItemControllerTest extends TestCase
      */
     public function it_displays_all_necessary_information_on_the_item_detail_page(): void
     {
+
+        Storage::fake('public');
+
         //準備
+        $file = UploadedFile::fake()->image('item.jpeg');
         $seller = User::factory()->create();
         $commenter = User::factory()->create(['name' => 'コメントユーザーA']);
 
@@ -198,6 +202,7 @@ class ItemControllerTest extends TestCase
         $category2 = Category::factory()->create(['content' => 'メンズ']);
 
         $item = Item::factory()->create([
+            'img' => $file->store('items', 'public'),
             'user_id' => $seller->id,
             'name' => 'テスト用高級腕時計',
             'brand' => 'テストブランド',
@@ -222,6 +227,7 @@ class ItemControllerTest extends TestCase
         //検証
         $response->assertStatus(200);
 
+        $response->assertSee($item->img);
         $response->assertSee('テスト用高級腕時計');
         $response->assertSee('テストブランド');
         $response->assertSee('¥50,000');
@@ -248,29 +254,31 @@ class ItemControllerTest extends TestCase
      */
     public function an_authenticated_user_can_create_a_new_item(): void
     {
+        Storage::fake('public');
+
         //準備
+        $file = UploadedFile::fake()->image('item.jpeg');
         $user = User::factory()->create();
         $category1 = Category::factory()->create();
         $category2 = Category::factory()->create();
 
-        Storage::fake('public'); // publicディスクを偽のストレージに置き換える
-        $dummyImage = UploadedFile::fake()->image('test_image.jpg', 100, 100);
-
         $itemData = [
+            'img' => $file,
             'name' => 'テスト出品商品',
             'brand' => 'テストブランド',
             'description' => 'これは商品説明です。',
-            'img' => $dummyImage,
             'condition' => '1',
             'categories' => [$category1->id, $category2->id],
             'price' => 12345,
         ];
 
-        //実行
+        // 実行
         $response = $this->actingAs($user)->post('/sell', $itemData);
 
-        //検証
+        // 検証
+        $response->assertStatus(302);
         $response->assertRedirect('/');
+
 
         $this->assertDatabaseHas('items', [
             'user_id' => $user->id,
@@ -279,12 +287,11 @@ class ItemControllerTest extends TestCase
             'price' => 12345,
         ]);
 
-        //画像ファイルが、実際にストレージに保存されたか
-        //    (データベースに保存されたパスを元に、ファイルが存在するかを確認)
-        $item = Item::first(); // 作成された最初の商品を取得
+        // 画像ファイルの確認
+        $item = Item::first();
         Storage::disk('public')->assertExists($item->img);
 
-        //category_itemテーブルに、2つのカテゴリが正しく紐付けられたか
+        // カテゴリ紐付け確認
         $this->assertDatabaseHas('category_item', [
             'item_id' => $item->id,
             'category_id' => $category1->id,

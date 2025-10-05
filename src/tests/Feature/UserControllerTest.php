@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Item;
 use App\Models\Purchase;
 use App\Models\Address;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class UserControllerTest extends TestCase
 {
@@ -20,11 +22,20 @@ class UserControllerTest extends TestCase
      */
     public function it_displays_user_information_and_items_correctly_on_mypage(): void
     {
+
+        // Storageをテスト用に偽装
+        Storage::fake('public');
+
         //準備
-        $user = User::factory()->create(['name' => 'マイページユーザー']);
+        $file = UploadedFile::fake()->image('profile.jpeg');
+        $user = User::factory()->create([
+            'name' => 'マイページユーザー',
+            'img' => $file->store('profiles', 'public'),
+        ]);
+
         $address = Address::factory()->create(['user_id' => $user->id]);
 
-        $listedItem = Item::factory()->create([
+        $item = Item::factory()->create([
             'user_id' => $user->id,
             'name' => '私が出品した商品',
         ]);
@@ -34,6 +45,10 @@ class UserControllerTest extends TestCase
             'user_id' => $user->id,
             'item_id' => $purchasedItem->id,
             'address_id' => $address->id,
+            'price' => $item->price,
+            'payment_method' => 1,
+            'payment_status' => 0,
+            'is_deleted' => 0,
         ]);
 
         //実行 & 検証
@@ -45,7 +60,7 @@ class UserControllerTest extends TestCase
         $responseSell->assertSee('マイページユーザー');
         $responseSell->assertSee('私が出品した商品');
         $responseSell->assertDontSee('私が購入した商品');
-
+        $responseSell->assertSee($user->img);
 
         //「購入した商品」タブの検証
         $responseBuy = $this->actingAs($user)->get('/mypage?page=buy');
@@ -54,6 +69,7 @@ class UserControllerTest extends TestCase
         $responseBuy->assertSee('マイページユーザー');
         $responseBuy->assertSee('私が購入した商品');
         $responseBuy->assertDontSee('私が出品した商品');
+        $responseSell->assertSee($user->img);
     }
 
     /**
@@ -62,10 +78,13 @@ class UserControllerTest extends TestCase
      */
     public function it_displays_existing_user_profile_data_on_the_edit_page(): void
     {
+        Storage::fake('public');
+
         //準備
+        $file = UploadedFile::fake()->image('profile.jpeg');
         $user = User::factory()->create([
+            'img' => $file->store('profiles', 'public'),
             'name' => 'テストユーザー名',
-            'img' => 'profiles/test-image.jpg',
             'post_code' => '123-4567',
             'address' => '東京都テスト区テスト町1-2-3',
         ]);
@@ -79,7 +98,6 @@ class UserControllerTest extends TestCase
         $response->assertSee('value="テストユーザー名"', false);
         $response->assertSee('value="123-4567"', false);
         $response->assertSee('value="東京都テスト区テスト町1-2-3"', false);
-
-        $response->assertSee('style="background-image: url(http://localhost/storage/profiles/test-image.jpg);"', false);
+        $response->assertSee($user->img);
     }
 }

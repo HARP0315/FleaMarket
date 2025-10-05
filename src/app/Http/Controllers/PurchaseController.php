@@ -108,6 +108,7 @@ class PurchaseController extends Controller
 
         // Stripe Checkout 作成
         Stripe::setApiKey(env('STRIPE_SECRET'));
+
         $session = Session::create([
             'payment_method_types' => [$form['payment_method'] == 1 ? 'konbini' : 'card'],
             'line_items' => [[

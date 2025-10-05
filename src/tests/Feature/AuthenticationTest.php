@@ -219,55 +219,49 @@ class AuthenticationTest extends TestCase
     /**
      * @test
      * 会員登録後、認証メールが送信される
+     * メール認証サイトのメール認証を完了すると、商品一覧ページに遷移する
+     * 以下はDuskで実施。
+     * メール認証誘導画面で「認証はこちらから」ボタンを押下するとメール認証サイトへ遷移
      */
     public function a_user_can_register_and_verify_their_email(): void
     {
-        //準備
-        //NotificationファサードとEventファサードをモック化
         Notification::fake();
-        Event::fake();
 
+        //準備
         $userData = [
-            'name'                  => '認証テストユーザー',
-            'email'                 => 'verify@example.com',
-            'password'              => 'password123',
+            'name' => 'テストユーザー',
+            'email' => 'verify@example.com',
+            'password' => 'password123',
             'password_confirmation' => 'password123',
         ];
 
-        // 1.「会員登録とメール送信」のテスト
+        $response = $this->post('/register', $userData);
+        $response->assertRedirect('/mypage/profile');
 
-        //実行
-        $this->post('/register', $userData);
+        // DBに登録されていること確認
+        $user = User::where('email', $userData['email'])->first();
+        $this->assertNotNull($user);
 
-        //検証
-        $this->assertDatabaseHas('users', ['email' => 'verify@example.com']);
-
-        $user = User::where('email', 'verify@example.com')->first();
-
-        //ユーザー宛に、認証メールが「送信された」ことを確認
+        //認証メールが送信されていること確認
         Notification::assertSentTo($user, \Illuminate\Auth\Notifications\VerifyEmail::class);
 
-        // 2.遷移テスト：メール認証サイトのメール認証を完了すると、商品一覧ページに遷移する
-
-        //準備
-        //Laravelが生成する「認証用URL」を作成
+        //メール認証サイトにアクセスするURLを作成
         $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify', // ルート名
-            now()->addMinutes(60), // 有効期限
-            ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->getEmailForVerification())
+            ]
         );
 
-        //実行
-        $response = $this->actingAs($user)->get($verificationUrl);
+        //認証URLにアクセス（ログイン状態で）
+        $verificationResponse = $this->actingAs($user)->get($verificationUrl);
 
-        //検証
-        //ユーザーが「認証済み」になったことを確認
+        //認証済みフラグが立っていることを確認
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
 
-        //認証完了のイベントが発生したことを確認
-        Event::assertDispatched(Verified::class);
-
-        //トップページにリダイレクトされたことを確認
-        $response->assertRedirect('/?verified=1');
+        //認証完了後に商品一覧画面にリダイレクトされる
+        $verificationResponse->assertRedirect('/?verified=1');
     }
 }

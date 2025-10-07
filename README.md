@@ -271,7 +271,7 @@ STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe 
     # 1. PHPコンテナに入る
     docker-compose exec mysql bash
 
-    # 2. MySQLクライアントに接続する (パスワードを求められたら .env の DB_PASSWORD を入力)
+    # 2. MySQLクライアントに接続する (パスワードを求められたら `docker-compose.yml`ファイルの MYSQL_ROOT_PASSWORD を入力)
     mysql -h mysql -u root -p
 
     # 3. MySQLプロンプトで、テスト用データベースを作成する

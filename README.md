@@ -155,7 +155,7 @@ no matching manifest for linux/arm64/v8 in the manifest list entries という�
     MAIL_USERNAME=null
     MAIL_PASSWORD=null
     MAIL_ENCRYPTION=null
-    MAIL_FROM_ADDRESS=null
+    MAIL_FROM_ADDRESS="hello@example.com"
     MAIL_FROM_NAME="${APP_NAME}"
     ```
 

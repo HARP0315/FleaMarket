@@ -206,7 +206,7 @@ class PurchaseController extends Controller
         }
 
         return redirect('/item/' . $item_id)
-            ->with('error', '支払いがキャンセルされました。');
+            ->with('error', '購入がキャンセルされました。');
     }
 }
 

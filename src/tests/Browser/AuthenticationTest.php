@@ -12,11 +12,12 @@ class AuthenticationTest extends DuskTestCase
 
     /**
      * @test
-     * 認証誘導画面のボタンをクリックすると、新しいタブでMailHogが開く
+     * メール認証誘導画面で「認証はこちらから」ボタンを押下するとメール認証サイトに遷移する
      */
     public function verification_notice_link_opens_mailhog_in_new_tab(): void
     {
 
+        //準備
         $user = User::factory()->create([
             'name' => '認証テストユーザー',
             'email' => 'verify@example.com',
@@ -24,6 +25,7 @@ class AuthenticationTest extends DuskTestCase
             'email_verified_at' => null,
         ]);
 
+        //実行
         $this->browse(function (Browser $browser) use ($user) {
             // actingAs相当でセッションにログイン状態をセット
             $browser->loginAs($user)
@@ -31,7 +33,7 @@ class AuthenticationTest extends DuskTestCase
                 ->assertSee('認証はこちらから')
                 ->clickLink('認証はこちらから');
 
-            // WebDriver 経由で新しいタブに切り替え
+            // 検証：WebDriver 経由で新しいタブに切り替え
             $handles = $browser->driver->getWindowHandles(); // 開いているタブ一覧
             $browser->driver->switchTo()->window(end($handles)); // 最後のタブに切り替え
 

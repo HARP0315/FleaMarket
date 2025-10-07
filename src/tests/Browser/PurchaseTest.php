@@ -15,12 +15,14 @@ use Mockery;
 class PurchaseTest extends DuskTestCase
 {
     /**
-     * 「購入する」ボタンを押し、purchasesテーブルにレコード作成、一覧での"SOLD"表示、マイページでの購入済みタブに表示を確認
-     *
+     * 「購入する」ボタンを押下すると購入が完了する
+     * 購入した商品は商品一覧画面にて「sold」と表示される
+     * 「プロフィール/購入した商品一覧」に追加されている
      * @return void
      */
     public function test_purchase_creates_pending_record()
     {
+        //準備
         $user = User::factory()->create([
             'post_code' => '123-4567',
             'address' => '東京都渋谷区',
@@ -34,12 +36,14 @@ class PurchaseTest extends DuskTestCase
         $mock = Mockery::mock('alias:' . Session::class);
         $mock->shouldReceive('create')->andReturn($sessionMock);
 
+        //実行
         $this->browse(function ($browser) use ($user, $item) {
             $browser->loginAs($user)
                 ->visit("/purchase/{$item->id}")
                 ->select('payment_method', 2)
                 ->press('購入する');
 
+            //検証
             //商品一覧画面を表示
             $browser->visit('/');
             //購入した商品に "SOLD" 表示があることを確認

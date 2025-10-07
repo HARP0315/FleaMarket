@@ -18,7 +18,7 @@ class UserControllerTest extends TestCase
 
     /**
      * @test
-     * マイページで、ユーザー情報、出品した商品、購入した商品が正しく表示される
+     * マイページで、プロフィール画像、ユーザー名、出品した商品一覧、購入した商品一覧が正しく表示される
      */
     public function it_displays_user_information_and_items_correctly_on_mypage(): void
     {
@@ -74,7 +74,7 @@ class UserControllerTest extends TestCase
 
     /**
      * @test
-     * プロフィール編集ページで、既存のユーザー情報が正しく初期表示される
+     * プロフィール編集ページで、既存のユーザー情報が正しく初期表示される（プロフィール画像、ユーザー名、郵便番号、住所）
      */
     public function it_displays_existing_user_profile_data_on_the_edit_page(): void
     {

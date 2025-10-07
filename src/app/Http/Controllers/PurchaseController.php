@@ -66,7 +66,7 @@ class PurchaseController extends Controller
     }
 
     /**
-     * stripeに
+     * 購入機能（stripeへの決済情報渡し）
      *
      * @param PurchaseRequest $request
      * @param [type] $item_id

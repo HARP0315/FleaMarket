@@ -16,12 +16,12 @@
         <a
          href="/?keyword={{ request('keyword') }}"
          class="item-list__tab-link
-            {{ request()->query('tab') !== 'mylist' ? 'item-list__tab-link--active' : ''}}"
+          {{ request()->query('tab') !== 'mylist' ? 'item-list__tab-link--active' : ''}}"
         >おすすめ</a>
         <a
          href="/?tab=mylist&keyword={{ request('keyword') }}"
          class="item-list__tab-link
-            {{ request()->query('tab') === 'mylist' ? 'item-list__tab-link--active' : '' }}"
+          {{ request()->query('tab') === 'mylist' ? 'item-list__tab-link--active' : '' }}"
         >マイリスト</a>
     </div>
     {{-- 商品一覧 --}}
@@ -31,7 +31,7 @@
             <a href="/item/{{$item->id}}"
              class="item-list__item-link
              @if($item->purchase)
-              --sold
+               --sold
              @endif"
              style="background-image: url({{ $item->image_url }});"
             >

@@ -68,7 +68,8 @@ class CommentControllerTest extends TestCase
 
     /**
      * @test
-     * コメントが入力されていないまたは255字以上の場合、バリデーションメッセージが表示される
+     * コメントが入力されていない場合、バリデーションメッセージが表示される
+     * コメントが255字以上の場合、バリデーションメッセージが表示される
      */
     public function comment_submission_is_validated(): void
     {

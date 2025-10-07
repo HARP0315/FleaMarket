@@ -72,7 +72,6 @@ class Item extends Model
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                // $attributes['img'] で、このモデルの'img'カラムの値を取得
                 $path = $attributes['img'];
 
                 // もしパスが'http'で始まっていたら、外部URLなのでそのまま返す

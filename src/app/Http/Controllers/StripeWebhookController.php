@@ -63,7 +63,7 @@ class StripeWebhookController extends Controller
                 $session = $event->data->object;
                 $itemId        = $session->metadata->item_id;
                 $userId        = $session->metadata->user_id;
-                $shippingAddress = $session->shipping_address; // 本番のみ存在
+                $shippingAddress = $session->shipping_address;
                 $paymentMethod = $session->metadata->payment_method;
             }
 

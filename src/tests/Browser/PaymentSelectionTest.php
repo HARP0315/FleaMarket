@@ -26,7 +26,7 @@ class PaymentSelectionTest extends DuskTestCase
 
         $item = Item::factory()->create();
 
-        //実行
+        //実行&検証
         $browser->visit('/login')
                 ->type('email', $user->email)
                 ->type('password', 'password')

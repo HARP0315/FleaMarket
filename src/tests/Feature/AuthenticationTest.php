@@ -20,7 +20,9 @@ class AuthenticationTest extends TestCase
 
     /**
      * @test
-     * 会員登録時に、名前・メール・パスワードが空の場合、バリデーションエラーが返ってくることを確認
+     * 名前が入力されていない場合、バリデーションメッセージが表示される
+     * メールアドレスが入力されていない場合、バリデーションメッセージが表示される
+     * パスワードが入力されていない場合、バリデーションメッセージが表示される
      */
     public function it_validates_registration_input(): void
     {
@@ -93,7 +95,7 @@ class AuthenticationTest extends TestCase
 
     /**
      * @test
-     * 全ての項目が正しい場合、ユーザーが作成され、プロフィール設定画面にリダイレクトされる
+     * 全ての項目が入力されている場合、会員情報が登録され、プロフィール設定画面に遷移される
      */
     public function user_can_register_successfully(): void
     {
@@ -128,7 +130,8 @@ class AuthenticationTest extends TestCase
 
     /**
      * @test
-     * ログイン時に、メールアドレスとパスワードが空の場合、バリデーションメッセージが返ってくる
+     * メールアドレスが入力されていない場合、バリデーションメッセージが表示される
+     * パスワードが入力されていない場合、バリデーションメッセージが表示される
      */
     public function login_fails_with_missing_credentials(): void
     {
@@ -220,7 +223,7 @@ class AuthenticationTest extends TestCase
      * @test
      * 会員登録後、認証メールが送信される
      * メール認証サイトのメール認証を完了すると、商品一覧ページに遷移する
-     * 以下はDuskで実施。
+     * （以下はDuskで実施）
      * メール認証誘導画面で「認証はこちらから」ボタンを押下するとメール認証サイトへ遷移
      */
     public function a_user_can_register_and_verify_their_email(): void

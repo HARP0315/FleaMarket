@@ -22,7 +22,8 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * ゲストユーザーは、商品一覧ページで、自分以外のユーザーが出品した全ての商品を見ることができ、売り切れの商品には「SOLD」と表示される
+     * 全商品を取得できる
+     * 購入済み商品は「Sold」と表示される
      */
     public function a_guest_can_view_all_items_with_sold_status(): void
     {
@@ -56,7 +57,7 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * ログインしているユーザーは、商品一覧ページで、自分自身が出品した商品が表示されない
+     * ログインしているユーザーは、自分が出品した商品は表示されない
      */
     public function an_authenticated_user_cannot_see_their_own_items_on_the_index_page(): void
     {
@@ -84,7 +85,8 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * ログインユーザーは、マイリストで自分がいいねした商品だけを見ることができ、購入済み商品には「SOLD」と表示される
+     * いいねした商品だけが表示される
+     * 購入済み商品は「Sold」と表示される
      */
     public function an_authenticated_user_can_view_their_liked_items_with_sold_status(): void
     {
@@ -121,7 +123,7 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * ゲストは、マイリストにアクセスしても、商品は何も表示されない
+     * 未認証の場合はマイリストに何も表示されない
      */
     public function a_guest_sees_no_items_on_the_mylist_page(): void
     {
@@ -143,7 +145,8 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * 商品名での部分一致検索ができ、その検索状態はマイリストタブでも保持される
+     * 「商品名」で部分一致検索ができる
+     * 検索状態がマイリストでも保持されている
      */
     public function it_can_search_items_by_name_and_persist_the_keyword_across_tabs(): void
     {
@@ -186,7 +189,8 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * 商品詳細ページで、関連する情報が全て正しく表示される＆複数カテゴリが表示される
+     * 必要な情報が表示される（商品画像、商品名、ブランド名、価格、いいね数、コメント数、商品説明、商品情報（カテゴリ、商品の状態）、コメント数、コメントしたユーザー情報、コメント内容）
+     * 複数選択されたカテゴリが表示されているか
      */
     public function it_displays_all_necessary_information_on_the_item_detail_page(): void
     {
@@ -250,7 +254,7 @@ class ItemControllerTest extends TestCase
 
     /**
      * @test
-     * 商品出品ページで必要な情報を全て正しく保存できる
+     * 商品出品ページで必要な情報を全て正しく保存できる（カテゴリ、商品の状態、商品名、ブランド名、商品の説明、販売価格）
      */
     public function an_authenticated_user_can_create_a_new_item(): void
     {

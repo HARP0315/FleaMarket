@@ -175,7 +175,7 @@ STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe 
         STRIPE_WEBHOOK_SECRET=whsec_...
         ```
 
-    2. ローカルでWebhookをテストするために、**ホストマシン（ローカルPC）**にStripe CLIをインストールします。
+    2. ローカルでWebhookをテストするために、ホストマシンにStripe CLIをインストールします。
 
 Stripe CLIのインストール手順
 
@@ -288,8 +288,6 @@ Stripe CLIのインストール手順
         DB_HOST=mysql
         DB_PORT=3306
         DB_DATABASE=fleamarket_test
-        DB_USERNAME=root
-        DB_PASSWORD=root
 
         DUSK_DRIVER_REMOTE_URL=http://selenium:4444/wd/hub
         ```

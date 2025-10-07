@@ -96,7 +96,7 @@ no matching manifest for linux/arm64/v8 in the manifest list entries という�
     cp .env.example .env
     ```
 
-5. .envに以下の環境変数を追加
+5. .envに以下の環境変数を追加します。
 
     ```env
     DB_CONNECTION=mysql

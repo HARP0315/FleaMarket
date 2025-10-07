@@ -148,6 +148,11 @@
     font-size: 16px;
 }
 
+.exhibition-form__select{
+    background-color: #5F5F5F;
+    color: #fff;
+}
+
 .exhibition-form__textarea {
     height: 120px;
 }

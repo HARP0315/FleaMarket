@@ -44,7 +44,7 @@ class ExhibitionRequest extends FormRequest
             'categories.required' => 'カテゴリーを選択してください',
             'condition.required' => '商品の状態を選択してください',
             'price.required' => '価格を入力してください',
-            'price.integer' => '価格は整数で入力してください',
+            'price.integer' => 'コンマを入れず入力してください',
             'price.min' => '価格は0以上で入力してください',
             'brand.string' => '建物は文字列で入力してください',
             'brand.max' => '建物は255文字以内で入力してください',

@@ -175,16 +175,25 @@ STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe 
     STRIPE_WEBHOOK_SECRET=whsec_...
     ```
 
-2. 設定変更の反映
+2. 設定変更の反映（設定が反映されない場合）
 
     ```bash
-    # PHPコンテナ内で実行
     php artisan optimize:clear
+    ```
+
+    ```bash
+    exit
     ```
 
 3. ローカルでWebhookをテストするために、ホストマシンにStripe CLIをインストールします。
 
 Stripe CLIのインストール手順
+
+（まずPHPコンテナに入る）
+
+```bash
+docker-compose exec php bash
+```
 
 - **macOS (Homebrew):**
 
@@ -333,7 +342,6 @@ Stripe CLIのインストール手順
     4. 設定変更の反映
 
         ```bash
-        # PHPコンテナ内で実行
         php artisan optimize:clear
         ```
 

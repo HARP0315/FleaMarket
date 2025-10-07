@@ -39,7 +39,6 @@ services:
 
     selenium:
         image: selenium/standalone-chrome:114.0
-        container_name: selenium
         platform: linux/amd64
         ports:
             - "4444:4444"

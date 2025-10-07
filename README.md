@@ -155,7 +155,7 @@ no matching manifest for linux/arm64/v8 in the manifest list entries という�
     MAIL_USERNAME=null
     MAIL_PASSWORD=null
     MAIL_ENCRYPTION=null
-    MAIL_FROM_ADDRESS="hello@example.com"
+    MAIL_FROM_ADDRESS=null
     MAIL_FROM_NAME="${APP_NAME}"
     ```
 
@@ -218,16 +218,40 @@ Stripe CLIのインストール手順
 ### PHPUnit (ユニットテスト/フィーチャーテスト)
 
 - **目的**: アプリケーションの内部ロジックをテストします。
-- **設定**:`phpunit.xml`ファイルを開き、以下の行が含まれているか確認してください。
+- **設定**:
 
-    ```xml
-    <php>
+    1. `phpunit.xml`ファイルを開き、以下の行が含まれているか確認してください。
+
+        ```xml
+        <php>
+            # ...
+            <server name="APP_ENV" value="testing"/>
+            <server name="DB_DATABASE" value="fleamarket_test"/>
+            # ...
+        </php>
+        ```
+
+    2. `.env`ファイルをコピーして`.env.testing`ファイルを作成します。
+
+        ```bash
+        cp .env .env.testing
+        ```
+
+    3. `.env.testing`ファイルの下記環境変数の編集および追加を行います。
+
+        ```env
+        （編集）
+        APP_ENV=testing
+
         # ...
-        <server name="APP_ENV" value="testing"/>
-        <server name="DB_DATABASE" value="fleamarket_test"/>
+        （編集）
+        DB_DATABASE=fleamarket_test
         # ...
-    </php>
-    ```
+
+        （追加）
+        DB_USERNAME=root
+        DB_PASSWORD=... ←docker-compose.ymlファイル記載のrootパスワードを追加
+        ```
 
 - **テスト実行前の準備 (初回のみ)**:
 
@@ -269,6 +293,8 @@ Stripe CLIのインストール手順
     1. Duskをインストールします。
       ```bash
       docker-compose exec php
+      ```
+      ```bash
       php artisan dusk:install
       ```
 
@@ -290,6 +316,9 @@ Stripe CLIのインストール手順
         DB_HOST=mysql
         DB_PORT=3306
         DB_DATABASE=fleamarket_test
+
+        DB_USERNAME=root
+        DB_PASSWORD=... ←docker-compose.ymlファイル記載のrootパスワードを追加
 
         DUSK_DRIVER_REMOTE_URL=http://selenium:4444/wd/hub
         ```

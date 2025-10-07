@@ -364,6 +364,7 @@ STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe 
 ## ■URL
 
 - 開発環境：[http://localhost/](http://localhost/)
+- MailHog：[http://localhost:8025](http://localhost:8025)
 - phpMyAdmin:：[http://localhost:8080/](http://localhost:8080/)
 
 ## ■その他仕様

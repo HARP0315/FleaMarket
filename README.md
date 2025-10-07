@@ -166,16 +166,23 @@ no matching manifest for linux/arm64/v8 in the manifest list entries という�
 - **目的**: クレジットカード決済機能と、決済イベントを非同期で受信するWebhookをローカルでテストします。
 - **設定**:
 
-    1. `.env`ファイルにStripeのAPIキーとWebhookシークレットキーを設定します。
+1. `.env`ファイルにStripeのAPIキーとWebhookシークレットキーを設定します。
 STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe listenコマンドを打つと表示されます
 
-        ```env
-        STRIPE_KEY=pk_test_...
-        STRIPE_SECRET=sk_test_...
-        STRIPE_WEBHOOK_SECRET=whsec_...
-        ```
+    ```env
+    STRIPE_KEY=pk_test_...
+    STRIPE_SECRET=sk_test_...
+    STRIPE_WEBHOOK_SECRET=whsec_...
+    ```
 
-    2. ローカルでWebhookをテストするために、ホストマシンにStripe CLIをインストールします。
+2. 設定変更の反映
+
+    ```bash
+    # PHPコンテナ内で実行
+    php artisan optimize:clear
+    ```
+
+3. ローカルでWebhookをテストするために、ホストマシンにStripe CLIをインストールします。
 
 Stripe CLIのインストール手順
 
@@ -323,7 +330,14 @@ Stripe CLIのインストール手順
         DUSK_DRIVER_REMOTE_URL=http://selenium:4444/wd/hub
         ```
 
-    4. マイグレーションを実行
+    4. 設定変更の反映
+
+        ```bash
+        # PHPコンテナ内で実行
+        php artisan optimize:clear
+        ```
+
+    5. マイグレーションを実行
 
         ```bash
         php artisan migrate:fresh --env=dusk.local

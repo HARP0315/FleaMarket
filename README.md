@@ -175,7 +175,7 @@ STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe 
     STRIPE_WEBHOOK_SECRET=whsec_...
     ```
 
-2. 設定変更の反映（設定が反映されない場合）
+2. 設定変更の反映
 
     ```bash
     php artisan optimize:clear
@@ -187,13 +187,7 @@ STRIPE_WEBHOOK_SECRETは、後ほどStripe CLIにログインした際にstripe 
 
 3. ローカルでWebhookをテストするために、ホストマシンにStripe CLIをインストールします。
 
-Stripe CLIのインストール手順
-
-（まずPHPコンテナに入る）
-
-```bash
-docker-compose exec php bash
-```
+【Stripe CLIのインストール手順】
 
 - **macOS (Homebrew):**
 
@@ -307,12 +301,14 @@ docker-compose exec php bash
 - **設定**:
 
     1. Duskをインストールします。
-      ```bash
-      docker-compose exec php
-      ```
-      ```bash
-      php artisan dusk:install
-      ```
+
+        ```bash
+        docker-compose exec php
+        ```
+
+        ```bash
+        php artisan dusk:install
+        ```
 
     2. PHPコンテナ内で以下のコマンドを実行します。
 

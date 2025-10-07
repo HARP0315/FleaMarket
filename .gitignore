@@ -19,3 +19,5 @@
 /src/.vscode
 /docker/mysql/data
 /src/.env.dusk.local
+/.env.testing
+/src/.env.testing

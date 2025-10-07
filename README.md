@@ -139,7 +139,7 @@ no matching manifest for linux/arm64/v8 in the manifest list entries という�
 
 ### 4. アプリケーションへのアクセス
 
-- Web: [http://localhost](http://localhost) （ポート番号は`docker-compose.yml`の設定に依存します）
+- Web: [http://localhost](http://localhost)
 
 ## ■各種ツールのセットアップと実行
 
@@ -212,8 +212,6 @@ Stripe CLIのインストール手順
         # ホストマシン（ローカルのターミナル）で実行
         stripe listen --forward-to http://localhost/stripe/webhook
         ```
-
-        （/stripe/webhookの部分は`routes/web.php`で定義したエンドポイントに合わせてください）
 
 ### PHPUnit (ユニットテスト/フィーチャーテスト)
 

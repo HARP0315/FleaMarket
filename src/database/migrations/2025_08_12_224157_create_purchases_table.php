@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('item_id')->constrained()->cascadeOnDelete()->unique();
+            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('address_id')->nullable();
             $table->foreign('address_id')->references('id')->on('addresses')->cascadeOnDelete();
             $table->integer('price');
